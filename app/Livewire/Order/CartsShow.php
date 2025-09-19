@@ -45,6 +45,15 @@ class CartsShow extends Component
         $this->loadCart();
     }
 
+    public function deleteProduct(int $id): void
+    {
+        $item = CartItem::query()->findOrFail($id);
+        $item->delete();
+        session()->flash('success', 'Успешно удалено из корзины');
+
+        $this->loadCart();
+    }
+
     public function render()
     {
         return view('livewire.order.carts-show');

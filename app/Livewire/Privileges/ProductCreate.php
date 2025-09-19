@@ -20,8 +20,8 @@ class ProductCreate extends Component
     #[Validate('required|string')]
     public string $description = '';
 
-    #[Validate('required|decimal|min:0')]
-    public float $price = 0;
+    #[Validate('required|numeric|min:0')]
+    public float $price;
 
     #[Validate('required|numeric|exists:categories,id')]
     public int $category_id;

@@ -11,7 +11,7 @@
                     <div class="card h-100">
                         <x-card-body :product="$product" />
                         <div class="card-footer d-flex justify-content-between align-items-center">
-                            <a href="{{ route('product', $product) }}" class="btn btn-outline-info " wire:navigate>По подробнее</a>
+                            <a href="{{ route('product', $product) }}" class="btn btn-outline-primary " wire:navigate>По подробнее</a>
                         </div>
                     </div>
                 </div>
