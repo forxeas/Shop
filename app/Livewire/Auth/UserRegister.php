@@ -6,9 +6,12 @@ use App\Models\User;
 use Auth;
 use Exception;
 use Hash;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+
+#[Layout('components.layouts.app', ['title' => 'Регистрация'])]
 class UserRegister extends Component
 {
     #[Validate('required|string|max:255')]

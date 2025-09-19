@@ -4,11 +4,17 @@ namespace App\Livewire\Order;
 
 use App\Models\CartItem;
 use Auth;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
+use function Livewire\after;
 
+#[Layout('components.layouts.app', ['title' => 'Корзина'])]
 class CartsShow extends Component
 {
     public $cartItems;
+
+    public string $message = '';
 
     public function mount(): void
     {
@@ -49,11 +55,19 @@ class CartsShow extends Component
     {
         $item = CartItem::query()->findOrFail($id);
         $item->delete();
-        session()->flash('success', 'Успешно удалено из корзины');
 
+        $this->message = 'Товар удален из корзины';
         $this->loadCart();
+
+        $this->dispatch('clear-message');
     }
 
+    #[On('clear-message')]
+    public function clearMessage(): void
+    {
+        sleep(3);
+        $this->message = '';
+    }
     public function render()
     {
         return view('livewire.order.carts-show');

@@ -5,11 +5,13 @@ namespace App\Livewire\Privileges;
 use App\Models\Category;
 use App\Models\Product;
 use Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-
+#[Layout('components.layouts.app', ['title' => 'Добавление продукта'])]
 class ProductCreate extends Component
 {
     use WithFileUploads;
@@ -56,7 +58,9 @@ class ProductCreate extends Component
 
         Product::query()->create($data);
 
+        session()->flash('success', 'Продукт успешно добавлен!');
         $this->reset('name', 'category_id', 'description', 'price', 'image');
+        redirect()->route('home');
     }
 
     public function render(): View

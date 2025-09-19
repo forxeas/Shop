@@ -19,6 +19,9 @@
                         <li class="nav-item">
                             <a  class="nav-link active" href="{{ route('account', Auth::user()->id) }}" wire:navigate>Личный кабинет</a>
                         </li>
+                            <li class="nav-item">
+                                <a  class="nav-link active" href="{{ route('cart') }}" wire:navigate>Корзина</a>
+                            </li>
                         <li class="nav-item">
                             <livewire:auth.user-logout />
                         </li>
@@ -35,10 +38,7 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                <livewire:search-field wire:model.live="search"></livewire:search-field>
             </div>
         </div>
     </nav>
@@ -52,7 +52,6 @@
         </div>
     @endif
 </div>
-
 <div>
     @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">

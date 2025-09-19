@@ -6,15 +6,25 @@ use App\Models\CartItem;
 use App\Models\Product;
 use Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Layout('components.layouts.app', ['title' => 'Shop'])]
 class MainShow extends Component
 {
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public string $search = '';
 
+    #[On('search')]
+    public function updateSearch($search): void
+    {
+        $this->search =  $search;
+        $this->resetPage();
+    }
 
     public function addingToCart(int $productId): void
     {
@@ -25,14 +35,23 @@ class MainShow extends Component
                 'quantity'   => 1,
             ]
         );
-
-        session()->flash('success', 'Товар добавлен в корзину!');
     }
 
     public function render(): View
     {
-        $products = Product::query()
-            ->with(['category', 'user'])
+        $query = Product::query()->with(['category', 'user']);
+
+        if(!empty($this->search)) {
+
+            $query = $query
+                ->where(function ($q) {
+                    $q->where('products.name', 'like', "%{$this->search}%");
+                })
+                ->orWhereHas('category', function ($q) {
+                    $q->where('categories.name', 'like', "%{$this->search}%");
+                });
+        }
+        $products = $query
             ->orderByDesc('id')
             ->paginate(16);
 

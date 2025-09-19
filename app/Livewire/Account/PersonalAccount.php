@@ -4,6 +4,8 @@ namespace App\Livewire\Account;
 
 use App\Models\Product;
 use App\Models\User;
+use Auth;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class PersonalAccount extends Component
@@ -20,7 +22,8 @@ class PersonalAccount extends Component
     public function render()
     {
         $products = Product::query()->where('products.user_id', '=', $this->user->id)->paginate();
-//        dd($products);
-        return view('livewire.account.personal-account')->with('products', $products);
+        return view('livewire.account.personal-account')
+            ->with('products', $products)
+            ->layout('components.layouts.app', ['title' => Auth::user()->name]);
     }
 }

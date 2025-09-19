@@ -1,4 +1,12 @@
 <div class="container py-4">
+    <div>
+        @if($message)
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ $message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+    </div>
     <div class="row mb-4">
         <div class="col-12">
             <h1 class="text-dark-emphasis border-bottom pb-2">Корзина покупок</h1>
@@ -11,7 +19,7 @@
                 <div class="col-lg-6 col-xl-4 mb-4">
                     <div class="card h-100 shadow ">
                         <x-card-body :product="$item->product"/>
-                        <div class="card-footer bg-white shadow">
+                        <div class="card-footer shadow">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="btn-group" role="group">
                                     <button class="btn btn-outline-danger"
@@ -28,9 +36,9 @@
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
-                                <button class="btn btn-danger" wire:click="deleteProduct({{ $item->id }})"
+                                <button class="btn btn-danger btn" wire:click="deleteProduct({{ $item->id }})"
                                         title="Удалить из корзины">
-                                    <i class="fas fa-trash">🗑️</i>
+                                    <i class=""><x-tabler-trash /></i>
                                 </button>
                             </div>
 

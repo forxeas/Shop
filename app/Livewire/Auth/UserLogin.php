@@ -6,9 +6,11 @@ use App\Models\User;
 use Auth;
 use Exception;
 use Hash;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
+#[Layout('components.layouts.app', ['title' => 'Аутентификация'])]
 class UserLogin extends Component
 {
     #[Validate('required|email|max:255')]
