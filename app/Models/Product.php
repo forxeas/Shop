@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
+
+class Product extends Model
+{
+    use HasSlug;
+    protected $fillable =
+        [
+            'user_id',
+            'category_id',
+            'name',
+            'description',
+            'image',
+            'slug',
+            'price'
+        ];
+
+    protected $cats =
+        [
+            'price' => 'decimal:2',
+        ];
+
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->BelongsTo(Category::class);
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->HasMany(CartItem::class);
+    }
+
+    public function orderItems(): Hasmany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+}
