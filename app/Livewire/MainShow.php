@@ -15,9 +15,9 @@ class MainShow extends Component
     protected $paginationTheme = 'bootstrap';
 
 
+
     public function addingToCart(int $productId): void
     {
-        dd($productId);
         CartItem::query()->create(
             [
                 'user_id'    => Auth::id(),
@@ -31,7 +31,16 @@ class MainShow extends Component
 
     public function render(): View
     {
-        $products = Product::query()->with(['category', 'user'])->orderByDesc('id')->paginate(16);
-        return view('livewire.main-show')->with(['products' => $products]);
+        $products = Product::query()
+            ->with(['category', 'user'])
+            ->orderByDesc('id')
+            ->paginate(16);
+
+        $addedCart = CartItem::query()
+            ->where('user_id', '=', Auth::id())
+            ->pluck('product_id')
+            ->toArray();
+
+        return view('livewire.main-show')->with(['products' => $products, 'addedCart' => $addedCart]);
     }
 }
