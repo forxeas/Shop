@@ -14,14 +14,15 @@
     <title>{{ $title ?? 'Shop' }}</title>
     @livewireStyles
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <x-nav-bar />
 
-<div class="container">
-    {{ $slot }}
-</div>
-
+<main class="flex-fill">
+    <div class="container">
+        {{ $slot }}
+    </div>
+</main>
 <x-footer />
 
 @livewireScripts
