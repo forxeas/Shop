@@ -2,6 +2,7 @@
     <div class="col-md-4">
         <h1 class="mb-4 ">Вход в аккаунт</h1>
         <form wire:submit="authorization">
+            @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Ваша почта</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="Email"

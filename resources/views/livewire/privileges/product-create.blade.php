@@ -2,6 +2,7 @@
     <div class="col-md-4">
         <h1 class="mb-4">Добавить продукт</h1>
         <form wire:submit="register" enctype="multipart/form-data">
+            @csrf
             <div class="mb-3">
                 <label for="name" class="form-label">Название продукта</label>
                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"

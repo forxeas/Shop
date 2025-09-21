@@ -8,7 +8,7 @@
         </a> <span class="mb-3 mb-md-0 text-body-secondary"><span dir="auto" style="vertical-align: inherit;"><span
                     dir="auto" style="vertical-align: inherit;">© {{ date('Y') }} Shop, inc.</span></span></span></div>
     <ul class="nav col-md-4 justify-content-lg-end list-unstyled d-flex">
-        <li class="ms-3"><a class="text-body-secondary p-1" href="https://github.com/foremen123" aria-label="Github">
+        <li class="ms-3"><a class="text-body-secondary p-1" href="https://github.com/forxeas" aria-label="Github">
                 <svg class="bi" width="24" height="24" aria-hidden="true">
                     <x-tabler-brand-github class="w-6 h-6" />
                 </svg>
