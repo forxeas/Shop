@@ -26,8 +26,12 @@ class MainShow extends Component
         $this->resetPage();
     }
 
-    public function addingToCart(int $productId): void
+    public function addingToCart(int $productId)
     {
+        if(! auth()->check()) {
+            return $this->redirect(route('login'));
+        }
+
         CartItem::query()->create(
             [
                 'user_id'    => Auth::id(),

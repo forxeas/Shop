@@ -32,9 +32,16 @@
                             <p class="mb-0 fw-bold">{{ $product->user->name }}</p>
                         </div>
 
-                        <button class="btn btn-primary" wire:click="addToCart({{ $product->id }})">
-                            В корзину
-                        </button>
+                        @if($addedCart && $product->id === $addedCart->product_id)
+                            <a  href="{{ route('cart') }}" class="btn btn-outline-success" wire:navigate>
+                                ✓
+                            </a>
+                        @else
+                            <button class="btn btn-primary"
+                                    wire:click.debounce.300ms="addingToCart({{ $product->id }})">
+                                В корзину
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>
