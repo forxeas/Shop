@@ -4,7 +4,7 @@
         @foreach($products as $product)
             <div class="col-md-3 mb-4">
                 <div class="card h-100">
-                    <x-card-body :product="$product" />
+                    <x-app.card-body :product="$product" />
                     <div class="card-footer d-flex justify-content-between align-items-center">
                         <a href="{{ route('product', $product) }}" class="btn btn-outline-primary " wire:navigate>По
                             подробнее</a>

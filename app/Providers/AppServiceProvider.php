@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\enums\RoleEnum;
+use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -22,8 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('editRole', function(User $user) {
-            return $user->role === RoleEnum::ADMIN;
+        Gate::define('AdminPanel', function(User $user) {
+            return $user->role === RoleEnum::getRole(RoleEnum::ADMIN);
         });
     }
 }

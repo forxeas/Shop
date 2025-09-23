@@ -16,14 +16,14 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-<x-nav-bar />
+<x-app.nav-bar />
 
 <main class="flex-fill">
     <div class="container">
         {{ $slot }}
     </div>
 </main>
-<x-footer />
+<x-app.footer />
 
 @livewireScripts
 </body>

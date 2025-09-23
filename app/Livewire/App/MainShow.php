@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\App;
 
 use App\Models\CartItem;
 use App\Models\Product;
@@ -64,6 +64,6 @@ class MainShow extends Component
             ->pluck('product_id')
             ->toArray();
 
-        return view('livewire.main-show')->with(['products' => $products, 'addedCart' => $addedCart]);
+        return view('livewire.app.main-show')->with(['products' => $products, 'addedCart' => $addedCart]);
     }
 }

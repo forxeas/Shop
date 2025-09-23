@@ -6,6 +6,7 @@ use App\Models\User;
 use Auth;
 use Exception;
 use Hash;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -40,7 +41,7 @@ class UserLogin extends Component
         }
 
     }
-    public function render()
+    public function render(): View
     {
         return view('livewire.auth.user-login');
     }

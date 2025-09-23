@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\enums\RoleEnum;
+use App\Enums\RoleEnum;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -11,16 +11,16 @@ class ProductPolicy
 {
     public function before(User $user): ?bool
     {
-       return $user->role === RoleEnum::ADMIN ?: null;
+       return $user->role === RoleEnum::getRole(RoleEnum::ADMIN) ?: null;
     }
 
     private function isOwner(User $user, Product $product): bool
     {
-        return $user->role === RoleEnum::SALER && $user->id === $product->user_id;
+        return $user->role === RoleEnum::getRole(RoleEnum::SALER) && $user->id === $product->user_id;
     }
     public function viewAny(User $user): bool
     {
-        return $user->role === RoleEnum::SALER;
+        return $user->role === RoleEnum::getRole(RoleEnum::SALER);
     }
 
     /**
@@ -36,7 +36,7 @@ class ProductPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === RoleEnum::SALER;
+        return $user->role === RoleEnum::getRole(RoleEnum::SALER);
     }
 
     /**

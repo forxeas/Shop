@@ -4,6 +4,7 @@ namespace App\Livewire\Order;
 
 use App\Models\CartItem;
 use Auth;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -21,7 +22,7 @@ class CartsShow extends Component
         $this->loadCart();
     }
 
-    public function loadCart(): void
+    private function loadCart(): void
     {
         $this->cartItems = CartItem::query()
             ->with(['user', 'product'])
@@ -68,7 +69,7 @@ class CartsShow extends Component
         sleep(3);
         $this->message = '';
     }
-    public function render()
+    public function render(): View
     {
         return view('livewire.order.carts-show');
     }

@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use Auth;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class UserLogout extends Component
@@ -16,7 +17,7 @@ class UserLogout extends Component
         redirect()->route('home');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.auth.user-logout');
     }

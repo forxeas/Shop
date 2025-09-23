@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\App;
 
 use App\Models\Product;
-use App\Models\User;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class SearchField extends Component
@@ -16,7 +16,7 @@ class SearchField extends Component
         $this->dispatch('search', $this->search);
     }
 
-    public function render()
+    public function render(): View
     {
         $products = Product::query()
             ->select('products.name', 'categories.name')
@@ -25,6 +25,6 @@ class SearchField extends Component
             ->orWhere('categories.name', 'like', "%{$this->search}%")
             ->paginate(16);
 
-        return view('livewire.search-field');
+        return view('livewire.app.search-field');
     }
 }

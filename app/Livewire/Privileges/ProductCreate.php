@@ -26,7 +26,7 @@ class ProductCreate extends Component
     public float $price;
 
     #[Validate('required|numeric|exists:categories,id')]
-    public int $category_id;
+    public string $category_id;
 
     #[Validate('nullable|image|max:2048')]
     public $image = '';

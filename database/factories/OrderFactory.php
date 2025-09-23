@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\enums\StatusEnum;
+use App\Enums\StatusEnum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

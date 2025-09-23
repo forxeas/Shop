@@ -40,7 +40,7 @@
                     <option selected>Выберите категорию</option>
                     @foreach($categories as $category)
                         <option wire:key="{{ $category->id }}"
-                                value="{{ $category->id }}">{{ $category->name }}</option>
+                                value="{{ $category->id  ?? 1}}">{{ $category->name }}</option>
                     @endforeach
                 </select>
             </div>

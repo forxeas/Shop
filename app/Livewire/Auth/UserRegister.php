@@ -6,6 +6,7 @@ use App\Models\User;
 use Auth;
 use Exception;
 use Hash;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -14,7 +15,7 @@ use Livewire\Component;
 #[Layout('components.layouts.app', ['title' => 'Регистрация'])]
 class UserRegister extends Component
 {
-    #[Validate('required|string|max:255')]
+    #[Validate('required|string|min:2|max:255')]
     public string $name = '';
 
     #[Validate('required|email|max:255|unique:users,email')]
@@ -46,7 +47,7 @@ class UserRegister extends Component
         }
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.auth.user-register');
     }

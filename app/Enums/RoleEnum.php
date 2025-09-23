@@ -1,6 +1,6 @@
 <?php
 
-namespace App\enums;
+namespace App\Enums;
 
 enum RoleEnum: string
 {
@@ -8,9 +8,9 @@ enum RoleEnum: string
     case SALER = 'saler';
     case CUSTOMER = 'customer';
 
-    static public function getRole(): string
+    static public function getRole(RoleEnum $role): string
     {
-        return match (self::class) {
+        return match ($role) {
             self::ADMIN => 'admin',
             self::SALER => 'saler',
             self::CUSTOMER => 'customer',

@@ -18,7 +18,7 @@
             @foreach($cartItems as $item)
                 <div class="col-lg-6 col-xl-4 mb-4">
                     <div class="card h-100 shadow ">
-                        <x-card-body :product="$item->product"/>
+                        <x-app.card-body :product="$item->product"/>
                         <div class="card-footer shadow">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="btn-group" role="group">
