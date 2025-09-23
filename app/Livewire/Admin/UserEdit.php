@@ -6,6 +6,7 @@ use App\Enums\RoleEnum;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
@@ -19,7 +20,6 @@ public User $user;
 #[Validate('required|string|min:2|max:255')]
 public string $name;
 
-#[Validate("required|email|min:2|max:255")]
 public string $email = '';
 
 #[Validate('nullable|string|min:2|max:255')]
@@ -34,7 +34,18 @@ public string $role;
         $this->email = $this->user->email;
         $this->role = $this->user->role;
     }
-
+    public function rules()
+    {
+        return [
+            'email' => [
+                'required',
+                'email',
+                'min:2',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->user->id),
+            ],
+        ];
+    }
     public function save()
     {
         $data = $this->validate();
