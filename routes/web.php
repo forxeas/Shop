@@ -3,8 +3,8 @@
 use App\Livewire\Account\PersonalAccount;
 use App\Livewire\Account\ProductShow;
 use App\Livewire\Admin\DashboardShow;
-use App\Livewire\Admin\UserEdit;
-use App\Livewire\Admin\UserIndex;
+use App\Livewire\Admin\User\Edit;
+
 use App\Livewire\App\MainShow;
 use App\Livewire\Auth\UserLogin;
 use App\Livewire\Auth\UserLogout;
@@ -30,8 +30,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function() {
        Route::get('/dashboard', DashboardShow::class)->name('dashboard');
 
-       Route::get('/user/index', UserIndex::class)->name('user.index');
-       Route::get('/user/edit/{user:slug}', UserEdit::class)->name('user.edit');
+       Route::get('/user/index', \App\Livewire\Admin\User\Index::class)->name('user.index');
+       Route::get('/user/edit/{user:slug}',\App\Livewire\Admin\User\Edit::class)->name('user.edit');
+
+       Route::get('/product/index', \App\Livewire\Admin\Product\Index::class)->name('product.index');
+       Route::get('/product/edit/{product:slug}',\App\Livewire\Admin\Product\Edit::class)
+           ->name('product.edit');
+
+
     });
 });
 

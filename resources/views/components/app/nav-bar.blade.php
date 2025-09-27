@@ -20,11 +20,18 @@
                     @endguest
                     @auth
                         <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('account', auth()->user()->slug) }}" wire:navigate>Личный
-                                кабинет</a>
+                            <a class="nav-link active" href="{{ route('account', auth()->user()->slug) }}" wire:navigate
+                            >
+                                Личный кабинет
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ route('cart') }}" wire:navigate>Корзина</a>
+                        </li>
+                        <li class="nav-item">
+                                <a href="javascript:void(0);" class="nav-link active" onclick="window.history.back();">
+                                    Назад
+                                </a>
                         </li>
                         <li class="nav-item">
                             <livewire:auth.user-logout/>
@@ -60,7 +67,7 @@
                         </li>
                     @endcan
                 </ul>
-                <livewire:app.search-field wire:model.live="search"></livewire:app.search-field>
+                <livewire:admin.helper.search-field />
             </div>
         </div>
     </nav>

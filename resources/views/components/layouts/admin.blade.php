@@ -10,22 +10,22 @@
 
 <div class="d-flex flex-grow-1">
 
-    <!-- Сайдбар -->
     <div class="bg-dark text-white p-3 vh-100" style="width: 250px;">
-        <h4>Админка</h4>
+        <h4><a class="nav-link" href="{{ route('admin.dashboard')}}" wire:navigate>Админка</a></h4>
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ route('admin.user.index') }}" wire:navigate>Пользователи</a>
             </li>
-            <li class="nav-item"><a class="nav-link text-white" href="" wire:navigate>Товары</a></li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ route('admin.product.index') }}" wire:navigate>Товары</a>
+            </li>
             <li class="nav-item"><a class="nav-link text-white" href="" wire:navigate>Настройки</a></li>
             <li class="nav-item mt-auto">
-                <a class="nav-link text-white" href="{{ route('home') }}" >Назад</a>
+                <a class="nav-link text-white" href="{{ route('home') }}" >На главную</a>
             </li>
         </ul>
     </div>
 
-    <!-- Контент -->
     <div class="flex-grow-1 p-3">
         {{ $slot }}
     </div>

@@ -1,7 +1,6 @@
 <div>
     <div>
         {{ $field }}
-
         @if($list[$name] !== $field)
 
             ⇅

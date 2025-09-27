@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Admin\User;
 
 use App\Enums\RoleEnum;
 use App\Models\User;
 use Hash;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
-class UserEdit extends Component
+class Edit extends Component
 {
 
 public User $user;
 
 #[Validate('required|string|min:2|max:255')]
-public string $name;
+public string $name = '';
 
 public string $email = '';
 
@@ -34,7 +33,7 @@ public string $role;
         $this->email = $this->user->email;
         $this->role = $this->user->role;
     }
-    public function rules()
+    public function rules(): array
     {
         return [
             'email' => [
@@ -65,7 +64,7 @@ public string $role;
     public function render(): View
     {
 
-        return view('livewire.admin.user-edit')
+        return view('livewire.admin.user.edit')
             ->layout('components.layouts.admin', ['title' => 'Редактирование пользователя']);
     }
 }

@@ -5,9 +5,11 @@ namespace App\Livewire\App;
 use App\Models\CartItem;
 use App\Models\Product;
 use Auth;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,20 +17,22 @@ use Livewire\WithPagination;
 class MainShow extends Component
 {
     use WithPagination;
+
     protected $paginationTheme = 'bootstrap';
 
+    #[Url]
     public string $search = '';
 
-    #[On('search')]
-    public function updateSearch($search): void
+    #[On('changeSearch')]
+    public function changeSearch($search): void
     {
-        $this->search =  $search;
+        $this->search = $search;
         $this->resetPage();
     }
 
     public function addingToCart(int $productId)
     {
-        if(! auth()->check()) {
+        if (! auth()->check()) {
             return $this->redirect(route('login'));
         }
 
@@ -41,11 +45,9 @@ class MainShow extends Component
         );
     }
 
-    public function render(): View
+    private function applySearch(Builder $query): Builder
     {
-        $query = Product::query()->with(['category', 'user']);
-
-        if(!empty($this->search)) {
+        if (! empty($this->search)) {
 
             $query = $query
                 ->where(function ($q) {
@@ -55,9 +57,19 @@ class MainShow extends Component
                     $q->where('categories.name', 'like', "%{$this->search}%");
                 });
         }
+        return $query;
+    }
+
+    public function render(): View
+    {
+        $query = Product::query()
+            ->with(['category', 'user'])
+            ->orderByDesc('id');
+
+        $query = $this->applySearch($query);
+
         $products = $query
-            ->orderByDesc('id')
-            ->paginate(16);
+            ->Paginate(16);
 
         $addedCart = CartItem::query()
             ->where('user_id', '=', Auth::id())

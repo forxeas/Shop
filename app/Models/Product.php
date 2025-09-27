@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,7 +43,7 @@ class Product extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->BelongsTo(User::class);
     }
 
     public function category(): BelongsTo
@@ -57,6 +58,6 @@ class Product extends Model
 
     public function orderItems(): Hasmany
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->HasMany(OrderItem::class);
     }
 }

@@ -6,7 +6,6 @@
         <h1 class="mb-4 ">Редактирование</h1>
         <form wire:submit="save">
             @csrf
-            @method('PATCH')
 
             <div class="mb-3">
                 <label for="name" class="form-label">Имя</label>
@@ -40,10 +39,6 @@
                 <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
-            {{--        <div class="mb-3 form-check">--}}
-            {{--            <input type="checkbox" class="form-check-input" id="exampleCheck1">--}}
-            {{--            <label class="form-check-label" for="exampleCheck1">Check me out</label>--}}
-            {{--        </div>--}}
             <div class="text-center">
                 <button type="submit" class="btn btn-warning mt-4 ">Сохранить</button>
             </div>

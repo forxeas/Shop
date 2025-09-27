@@ -6,6 +6,7 @@ use App\Models\User;
 use Auth;
 use Exception;
 use Hash;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
