@@ -59,6 +59,7 @@ class Edit extends Component
 
     public function render(): View
     {
-        return view('livewire.admin.product.edit');
+        return view('livewire.admin.product.edit')
+            ->layout('components.layouts.admin', ['title' => 'Редактирование пользователя']);
     }
 }

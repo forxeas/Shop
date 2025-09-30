@@ -2,9 +2,7 @@
 
 use App\Livewire\Account\PersonalAccount;
 use App\Livewire\Account\ProductShow;
-use App\Livewire\Admin\DashboardShow;
-use App\Livewire\Admin\User\Edit;
-
+use App\Livewire\Admin\App\DashboardShow;
 use App\Livewire\App\MainShow;
 use App\Livewire\Auth\UserLogin;
 use App\Livewire\Auth\UserLogout;
@@ -27,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/product/create', ProductCreate::class)->name('product.create');
     Route::get('/cart', CartsShow::class)->name('cart');
 
-    Route::prefix('admin')->name('admin.')->group(function() {
+    Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:AdminPanel'])->group(function() {
        Route::get('/dashboard', DashboardShow::class)->name('dashboard');
 
        Route::get('/user/index', \App\Livewire\Admin\User\Index::class)->name('user.index');
@@ -37,7 +35,9 @@ Route::middleware('auth')->group(function () {
        Route::get('/product/edit/{product:slug}',\App\Livewire\Admin\Product\Edit::class)
            ->name('product.edit');
 
-
+       Route::get('category/index', \App\Livewire\Admin\Category\Index::class)->name('category.index');
+       Route::get('category/edit/{category:slug}', \App\Livewire\Admin\Category\Edit::class)
+           ->name('category.edit');
     });
 });
 

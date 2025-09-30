@@ -10,7 +10,7 @@
 
 <div class="d-flex flex-grow-1">
 
-    <div class="bg-dark text-white p-3 vh-100" style="width: 250px;">
+    <div class="bg-dark text-white p-3" style="width: 250px;">
         <h4><a class="nav-link" href="{{ route('admin.dashboard')}}" wire:navigate>Админка</a></h4>
         <ul class="nav flex-column">
             <li class="nav-item">
@@ -19,7 +19,9 @@
             <li class="nav-item">
                 <a class="nav-link text-white" href="{{ route('admin.product.index') }}" wire:navigate>Товары</a>
             </li>
-            <li class="nav-item"><a class="nav-link text-white" href="" wire:navigate>Настройки</a></li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ route('admin.category.index')}}" wire:navigate>Категории</a>
+            </li>
             <li class="nav-item mt-auto">
                 <a class="nav-link text-white" href="{{ route('home') }}" >На главную</a>
             </li>
@@ -31,8 +33,6 @@
     </div>
 
 </div>
-
-<x-app.footer />
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -5,9 +5,8 @@
         <livewire:admin.helper.search-field/>
     </div>
 
-    <div>
-        <table class="table table-striped">
-            <thead>
+    <x-admin.table>
+        <x-slot:head>
             <tr>
                 <th>
                     <a href="" class="text-decoration-none text-dark" wire:click.prevent="changeOrderBy('products.id')">
@@ -55,10 +54,9 @@
                     Удалить
                 </th>
             </tr>
-
-            </thead>
-            <tbody>
-            @foreach($products as $product)
+        </x-slot>
+        <x-slot:body>
+            @foreach($items as $product)
                 <tr>
                     <td> {{ $product->id }}</td>
                     <td>
@@ -76,12 +74,12 @@
                         </a>
                     </td>
                     <td>
-                        <button class="btn btn-danger" wire:click="deleteUser({{ $product->id }})">Удалить</button>
+                        <button class="btn btn-danger" wire:click="delete({{ $product->id }})">Удалить</button>
                     </td>
                 </tr>
             @endforeach
-            </tbody>
-        </table>
-    </div>
-    {{ $products->links() }}
+        </x-slot>
+    </x-admin.table>
+
+    {{ $items->links() }}
 </div>

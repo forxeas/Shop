@@ -52,7 +52,7 @@ public string $role;
         if(!empty($this->password)) {
             $this->password = Hash::make($this->password);
         } else {
-            unset($data[$this->password]);
+            unset($data['password']);
         }
 
         session()->flash('success', 'Успешное изменение');
