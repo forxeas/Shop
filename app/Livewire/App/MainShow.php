@@ -47,14 +47,12 @@ class MainShow extends Component
 
     private function applySearch(Builder $query): Builder
     {
-        if (! empty($this->search)) {
-
-            $query = $query
-                ->where(function ($q) {
-                    $q->where('products.name', 'like', "%{$this->search}%");
-                })
-                ->orWhereHas('category', function ($q) {
-                    $q->where('categories.name', 'like', "%{$this->search}%");
+        if (isset($this->search)) {
+            $query->where(function ($q) {
+                $q->where('products.name', 'like', "%{$this->search}%")
+                    ->orWhereHas('category', function ($subQ) {
+                        $subQ->where('categories.name', 'like', "%{$this->search}%");
+                    });
                 });
         }
         return $query;

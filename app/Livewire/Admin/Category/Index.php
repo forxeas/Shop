@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Index extends AbstractIndex
 {
-    public string $fieldName = 'categories.id';
     public array $arrayFields =
         [
             'categories.id' => 'ID',
@@ -18,10 +17,12 @@ class Index extends AbstractIndex
     public function applySearch(Builder $query): Builder
     {
         if (isset($this->search)) {
-            return $query
-                ->orWhere('categories.id', 'like', '%' . $this->search . '%')
-                ->orWhere('categories.name', 'like', '%' . $this->search . '%')
-                ->orHaving('products_count', 'like', '%' . $this->search . '%');
+            return $query->where(function($q) {
+                $q
+                    ->orWhere('categories.id', 'like', '%' . $this->search . '%')
+                    ->orWhere('categories.name', 'like', '%' . $this->search . '%')
+                    ->orHaving('products_count', 'like', '%' . $this->search . '%');
+            });
         }
 
         return $query;
@@ -36,7 +37,9 @@ class Index extends AbstractIndex
 
     protected function baseQuery(): Builder
     {
-        return Category::query()->withCount(['products']);
+        return Category::query()
+            ->leftJoin('products', 'products.category_id', '=', 'categories.id')
+            ->select('categories.*');
     }
 
     protected function viewPath(): string
@@ -47,5 +50,10 @@ class Index extends AbstractIndex
     protected function title(): string
     {
         return 'Категории';
+    }
+
+    protected function defaultFieldName(): string
+    {
+        return 'categories.id';
     }
 }

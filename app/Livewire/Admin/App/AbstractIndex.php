@@ -14,9 +14,8 @@ abstract class AbstractIndex extends Component
 {
     use WithPagination;
 
+    protected ?string $fieldName = null;
     protected $paginationTheme = 'bootstrap';
-
-    public string $fieldName      = 'users.id';
     public string $fieldDirectory = 'desc';
 
     #[Url]
@@ -25,6 +24,7 @@ abstract class AbstractIndex extends Component
     #[Url]
     public string $search = '';
 
+    abstract protected function defaultFieldName(): string;
     abstract public function delete(int $id): void;
     abstract protected function baseQuery(): Builder;
     abstract protected function viewPath(): string;
@@ -33,7 +33,7 @@ abstract class AbstractIndex extends Component
     public function mount(): void
     {
         $arrayLimits = Config::get('constants.arrayLimit');
-        $this->limit = in_array($this->limit, $arrayLimits) ? $this->limit : $arrayLimits[0];
+        $this->limit = in_array($this->limit, $arrayLimits, true) ? $this->limit : $arrayLimits[0];
     }
 
     #[On('changeLimit')]
@@ -52,8 +52,8 @@ abstract class AbstractIndex extends Component
 
     public function changeOrderBy(string $field): void
     {
-        if ($this->fieldName !== $field) {
-            $this->fieldName      = $field;
+        if ($this->defaultFieldName() !== $field) {
+            $this->fieldName = $field;
             $this->fieldDirectory = 'asc';
         } else {
             $this->fieldDirectory = $this->fieldDirectory === 'desc' ? 'asc' : 'desc';
@@ -68,14 +68,15 @@ abstract class AbstractIndex extends Component
 
     public function render(): View
     {
+        $fieldName = $this->fieldName ?? $this->defaultFieldName();
         $query = $this->baseQuery()
-            ->orderby($this->fieldName, $this->fieldDirectory);;
+            ->orderby($fieldName, $this->fieldDirectory);
 
-        $query = $this->applySearch($query);
+            $query = $this->applySearch($query);
         $items = $query->Paginate($this->limit);
 
         return view($this->viewPath())
-            ->with(['items' => $items])
+            ->with(['items' => $items, 'fieldName' => $fieldName])
             ->layout('components.layouts.admin', ['title' => $this->title()]);
     }
 }

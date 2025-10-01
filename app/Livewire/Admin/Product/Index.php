@@ -5,13 +5,9 @@ namespace App\Livewire\Admin\Product;
 use App\Livewire\Admin\App\AbstractIndex;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
-use Livewire\WithPagination;
 
 class Index extends AbstractIndex
 {
-    use WithPagination;
-
-    public string $fieldName = 'products.id';
     public array $arrayFields =
         [
             'products.id' => 'ID',
@@ -29,21 +25,27 @@ class Index extends AbstractIndex
 
     protected function applySearch(Builder $query): Builder
     {
-        if (! empty($this->search)) {
-            $query = $query
-                ->where('products.id', 'like', '%' . $this->search . '%')
-                ->orWhere('products.name', 'like', '%' . $this->search . '%')
-                ->orWhere('products.price', 'like', '%' . $this->search . '%')
-                ->orWhere('users.name', 'like', '%' . $this->search . '%')
-                ->orWhere('categories.name', 'like', '%' . $this->search . '%');
-        }
+        if (isset($this->search)) {
+
+            $query = $query->where(function($q) {
+                $q
+                    ->where('products.id', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.name', 'like', '%' . $this->search . '%')
+                    ->orWhere('products.price', 'like', '%' . $this->search . '%')
+                    ->orWhere('users.name', 'like', '%' . $this->search . '%')
+                    ->orWhere('categories.name', 'like', '%' . $this->search . '%');
+                });
+            }
 
         return $query;
     }
 
     protected function baseQuery(): Builder
     {
-        return Product::query()->with(['user', 'category']);
+        return Product::query()
+            ->leftJoin('users', 'users.id', '=', 'products.user_id')
+            ->leftJoin('categories', 'categories.id', '=', 'products.category_id')
+            ->select('products.*');
     }
 
     protected function viewPath(): string
@@ -54,5 +56,10 @@ class Index extends AbstractIndex
     protected function title(): string
     {
         return 'Товары';
+    }
+
+    protected function defaultFieldName(): string
+    {
+        return 'products.id';
     }
 }

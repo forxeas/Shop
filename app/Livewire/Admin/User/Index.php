@@ -25,11 +25,13 @@ class Index extends AbstractIndex
     protected function applySearch(Builder $query): Builder
     {
         if (isset($this->search)) {
-            $query = $query
-                ->where('users.id', 'like', '%' . $this->search . '%')
-                ->orWhere('users.name', 'like', '%' . $this->search . '%')
-                ->orWhere('users.role', 'like', '%' . $this->search . '%')
-                ->orHaving('products_count', 'like', '%' . $this->search . '%');
+            $query = $query->where(function($q) {
+              $q
+                  ->orWhere('users.id', 'like', '%' . $this->search . '%')
+                  ->orWhere('users.name', 'like', '%' . $this->search . '%')
+                  ->orWhere('users.role', 'like', '%' . $this->search . '%')
+                  ->orHaving('products_count', 'like', '%' . $this->search . '%');
+            });
         }
 
         return $query;
@@ -37,7 +39,9 @@ class Index extends AbstractIndex
 
     protected function baseQuery(): Builder
     {
-        return User::query()->withCount(['products']);
+        return User::query()
+            ->leftJoin('products', 'users.id', '=', 'products.user_id')
+            ->select('users.*');
     }
 
     protected function viewPath(): string
@@ -48,5 +52,10 @@ class Index extends AbstractIndex
     protected function title(): string
     {
         return 'Пользователи';
+    }
+
+    protected function defaultFieldName(): string
+    {
+        return 'users.id';
     }
 }
