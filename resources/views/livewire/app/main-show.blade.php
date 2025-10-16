@@ -1,6 +1,6 @@
-<div class="row ms-5">
+<div class="row">
 
-    <div class="row ms-5">
+    <div class="row">
         @foreach($products as $product)
             <div class="col-md-3 mb-4">
                 <div class="card h-100">

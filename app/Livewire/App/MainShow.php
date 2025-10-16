@@ -36,10 +36,13 @@ class MainShow extends Component
             return $this->redirect(route('login'));
         }
 
+        $product = Product::query()->where('id', '=', $productId)->first();
         CartItem::query()->create(
             [
                 'user_id'    => Auth::id(),
                 'product_id' => $productId,
+                'price'      => $product->price,
+                'discount'   => $product->discount,
                 'quantity'   => 1,
             ]
         );

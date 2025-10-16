@@ -18,13 +18,18 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $price    = fake()->numberBetween(100, 10000);
+        $discount = $price / 2;
+
         return [
             'user_id'     => User::factory(),
             'category_id' => Category::factory(),
             'name'        => fake()->sentence(2),
             'description' => fake()->text(),
-            'image'       => fake()->imageUrl,
-            'price'       => fake()->numberBetween(100, 10000),
+            'image'       => fake()->imageUrl(1280, 720, 'product', true, 'Product'),
+            'price'       => $price,
+            'discount'    => $discount,
+            'selected'    => fake()->numberBetween(0, 1),
         ];
     }
 }

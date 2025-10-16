@@ -28,6 +28,9 @@ class Edit extends Component
     #[Validate('required|string|min:2|max:255')]
     public string $category;
 
+    #[Validate('required|image|max:2048')]
+    public string $image;
+
     public function mount(): void
     {
         $this->name = $this->product->name;
@@ -35,15 +38,17 @@ class Edit extends Component
         $this->price = $this->product->price;
         $this->userName = $this->product->user->name;
         $this->category = $this->product->category->name;
+        $this->image = $this->product->image;
     }
     public function save()
     {
         $data = $this->validate();
 
         $this->product->update([
-            'name' => $data['name'],
+            'name'        => $data['name'],
             'description' => $data['description'],
-            'price' => $data['price'],
+            'price'       => $data['price'],
+            'image'       => $data['image']
         ]);
 
         $this->product->user->update([

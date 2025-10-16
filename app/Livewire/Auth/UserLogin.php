@@ -2,17 +2,14 @@
 
 namespace App\Livewire\Auth;
 
-use App\Models\User;
 use Auth;
-use Exception;
-use Hash;
-use Illuminate\Http\RedirectResponse;
+
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Log;
+use Throwable;
 
-#[Layout('components.layouts.app', ['title' => 'Аутентификация'])]
 class UserLogin extends Component
 {
     #[Validate('required|email|max:255')]
@@ -21,29 +18,34 @@ class UserLogin extends Component
     #[Validate('required|string|min:8|max:255')]
     public string $password = '';
 
+    #[Validate('nullable|boolean')]
+    public bool $remember;
+
     public function authorization()
     {
         try {
             $validated = $this->validate();
+            $remember = $validated['remember'] ?? false;
+            unset($validated['remember']);
 
-            $user = User::query()->where('email', $validated['email'])->first();
-
-            if (! $user || ! Hash::check($validated['password'], $user->password)) {
-                session()->flash('error', 'Неверный логин или пароль!');
-                return redirect()->route('login', [], 301);
+            if(Auth::attempt($validated, $remember)) {
+                session()->flash('success', 'Вы успешно вошли в аккаунт!');
+                return redirect()->route('home');
             }
 
-            Auth::login($user);
-            session()->flash('success', 'Вы успешно вошли в аккаунт!');
-            return redirect()->route('home', [], 301);
-        } catch(Exception $e) {
-            session()->flash('error', 'Ошибка при регистрации. Попробуйте еще раз.');
-            return redirect()->back();
+            session()->flash('error', 'Неверный логин или пароль!');
+            return redirect()->route('login');
+
+        } catch(Throwable $e) {
+            Log::error('Ошибка регистрации: '.$e->getMessage());
+            session()->flash('error', 'Ошибка при авторизации. Попробуйте еще раз.');
+            return redirect()->route('login');
         }
 
     }
     public function render(): View
     {
-        return view('livewire.auth.user-login');
+        return view('livewire.auth.user-login')
+            ->title('Аутентификация');
     }
 }

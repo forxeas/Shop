@@ -24,11 +24,6 @@ class Product extends Model
             'price'
         ];
 
-    protected $cats =
-        [
-            'price' => 'decimal:2',
-        ];
-
     public function getSlugOptions() : SlugOptions
     {
         return SlugOptions::create()

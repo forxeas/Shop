@@ -2,24 +2,24 @@
 
 namespace App\Providers;
 
+use App\Contracts\NotifierInterface;
 use App\Enums\RoleEnum;
 use App\Models\User;
+use App\Services\Messages\MessageService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use ReflectionException;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * @throws ReflectionException
      */
     public function register(): void
     {
-        //
+        app()->bind(NotifierInterface::class, MessageService::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         Gate::define('AdminPanel', function(User $user) {

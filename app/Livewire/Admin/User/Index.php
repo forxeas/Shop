@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\User;
 
 use App\Livewire\Admin\App\AbstractIndex;
 use App\Models\User;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 
 class Index extends AbstractIndex
@@ -15,7 +16,7 @@ class Index extends AbstractIndex
             'users.role'     => 'Роль',
             'products_count' => 'Кол-во товаров у продавца'
         ];
-
+    public ?string $fieldName = null;
     public function delete(int $id): void
     {
         User::query()->where('id', '=', $id)->delete();
@@ -41,7 +42,9 @@ class Index extends AbstractIndex
     {
         return User::query()
             ->leftJoin('products', 'users.id', '=', 'products.user_id')
-            ->select('users.*');
+            ->select('users.*')
+            ->addSelect(DB::raw('COUNT(products.id) as products_count'))
+            ->groupBy('users.id');
     }
 
     protected function viewPath(): string

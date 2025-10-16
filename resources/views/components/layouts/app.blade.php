@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
             crossorigin="anonymous"></script>
-
+    <script src="https://api-maps.yandex.ru/v3/?apikey=f156e2f8-9507-4e0f-aa54-ed054e50cc7a&lang=ru_RU"></script>
     <title>{{ $title ?? 'Shop' }}</title>
     @livewireStyles
 </head>

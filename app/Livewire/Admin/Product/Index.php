@@ -16,7 +16,7 @@ class Index extends AbstractIndex
             'users.name' => 'Автор',
             'categories.name' => 'Название категории',
         ];
-
+    public ?string $fieldName = null;
     public function delete(int $id): void
     {
         Product::query()->where('id', '=',  $id)->delete();

@@ -1,7 +1,7 @@
 <div class="row justify-content-center mt-5">
     <div class="col-md-4">
         <h1 class="mb-4 ">Редактирование</h1>
-        <form wire:submit="save">
+        <form wire:submit="save" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">
@@ -37,6 +37,18 @@
                 @error('category')
                 <div class="text-danger">{{ $message }}</div> @enderror
             </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Изображение</label>
+                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image"
+                       placholder="Категории" wire:model.blur="image" alt="ав">
+                @error('image')<div class="text-danger">{{ $message }}</div> @enderror
+
+                <div class="h-25 mt-5">
+                    <img src="{{ asset('storage/' . $image) }}" class="img-fluid" alt="Ваша фотография">
+                    @dump(asset($image))
+                </div>
+            </div>
+
 
             <div class="text-center">
                 <button type="submit" class="btn btn-warning mt-4 ">Сохранить</button>

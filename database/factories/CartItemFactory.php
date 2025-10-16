@@ -18,11 +18,16 @@ class CartItemFactory extends Factory
      */
     public function definition(): array
     {
+        $product  = Product::query()->inRandomOrder()->first();
+        $user     = User::query()->inRandomOrder()->first() ?? User::factory()->create();
+
         return [
-            'user_id'    => User::factory(),
-            'product_id' => Product::factory(),
+            'user_id'    => $user->id,
+            'product_id' => $product->id,
             'quantity'   => fake()->numberBetween(1, 5),
-            'price'   => fake()->numberBetween(1, 25000)
+            'price'      => $product->price,
+            'discount'   => $product->discount,
+            'selected'   => fake()->numberBetween(0, 1)
         ];
     }
 }

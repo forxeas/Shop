@@ -1,6 +1,6 @@
 <div>
     <div class="mb-5 ">
-        <h1 class=""> {{ Auth::user()->name }} </h1>
+        <h1 class="text-dark-emphasis border-bottom pb-2"> {{ Auth::user()->name }} </h1>
     </div>
 
     <div class="row ms-5">

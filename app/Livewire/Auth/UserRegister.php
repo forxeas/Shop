@@ -4,12 +4,13 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Auth;
-use Exception;
 use Hash;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Log;
+use Throwable;
 
 
 #[Layout('components.layouts.app', ['title' => 'Регистрация'])]
@@ -24,10 +25,17 @@ class UserRegister extends Component
     #[Validate('required|string|min:6|max:255')]
     public string $password = '';
 
+    #[Validate('nullable|boolean')]
+    public bool $remember;
+
     public function register()
     {
         try{
+
         $validated = $this->validate();
+        $remember = $validated['remember'] ?? false;
+        unset($validated['remember']);
+
         $user = User::create(
             [
                'name' => $validated['name'],
@@ -36,14 +44,15 @@ class UserRegister extends Component
             ]
         );
 
-        Auth::login($user);
-        $this->reset('name', 'email', 'password');
-        session()->flash('success', 'Вы успешно зарегистрировались!');
+        Auth::login($user, $remember);
 
-        return redirect()->route('home',[], 301);
-        } catch(Exception $e) {
+        session()->flash('success', 'Вы успешно зарегистрировались!');
+        return redirect()->route('home');
+
+        } catch(Throwable $e) {
+            Log::error('Ошибка регистрации: '.$e->getMessage());
             session()->flash('error', 'Ошибка при регистрации. Попробуйте еще раз.');
-            return redirect()->back();
+            return redirect()->route('register');
         }
     }
 

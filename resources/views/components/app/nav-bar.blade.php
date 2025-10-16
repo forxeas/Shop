@@ -1,6 +1,6 @@
 @php use App\Models\Product;use App\Models\User; @endphp
-<div>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+<div class="container">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('home') }}" wire:navigate>Shop</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -71,9 +71,11 @@
             </div>
         </div>
     </nav>
+    <div class="my-3">
+        <x-app.success />
+        <x-app.error />
+    </div>
 </div>
 
-<x-app.success />
-<x-app.error />
 
 

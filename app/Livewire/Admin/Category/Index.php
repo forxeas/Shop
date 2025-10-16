@@ -14,6 +14,7 @@ class Index extends AbstractIndex
             'categories.name' => 'Название категории',
             'products_count' => 'Сколько товаров',
         ];
+    public ?string $fieldName = null;
     public function applySearch(Builder $query): Builder
     {
         if (isset($this->search)) {

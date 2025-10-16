@@ -7,7 +7,8 @@ use App\Livewire\App\MainShow;
 use App\Livewire\Auth\UserLogin;
 use App\Livewire\Auth\UserLogout;
 use App\Livewire\Auth\UserRegister;
-use App\Livewire\Order\CartsShow;
+use App\Livewire\Cart\CartsShow;
+use App\Livewire\Cart\Order;
 use App\Livewire\Privileges\ProductCreate;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/product/create', ProductCreate::class)->name('product.create');
     Route::get('/cart', CartsShow::class)->name('cart');
+
+    Route::get('order', Order::class)->name('order');
+
 
     Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:AdminPanel'])->group(function() {
        Route::get('/dashboard', DashboardShow::class)->name('dashboard');

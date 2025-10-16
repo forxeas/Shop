@@ -4,21 +4,23 @@ namespace App\Enums;
 
 enum StatusEnum: string
 {
+    case RECEIVED = 'received';
     case SEND = 'send';
     case PENDING = 'pending';
     case FAILED = 'failed';
 
-    static public function getStatus(): string
+    public static function getStatus(): string
     {
         return match (self::class) {
+            self::RECEIVED => 'Received',
             self::SEND => 'Send',
             self::PENDING => 'Pending',
             self::FAILED => 'Failed',
         };
     }
 
-    static public function getValues(): array
+    public static function getValues(): array
     {
-        return array_map(fn($case) => $case->value, self::cases());
+        return array_map(static fn($case) => $case->value, self::cases());
     }
 }

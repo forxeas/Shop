@@ -42,15 +42,35 @@ services:
             - sail
         healthcheck:
             test:
-                - CMD
-                - mysqladmin
-                - ping
-                - '-p${DB_PASSWORD}'
+                [CMD,
+                mysqladmin,
+                ping,
+                '-p${DB_PASSWORD}'
+                ]
             retries: 3
             timeout: 5s
+    redis:
+        image: 'redis:latest'
+        ports:
+            - '${REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'sail-redis:/data'
+        networks:
+            - sail
+        healthcheck:
+            test:
+              ["CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+        depends_on:
+            - mysql
+            - laravel.test
 networks:
     sail:
         driver: bridge
 volumes:
     sail-mysql:
+        driver: local
+    sail-redis:
         driver: local

@@ -62,6 +62,7 @@
         @if($image && is_object($image))
             <div class="h-25 mt-3">
                 <img src="{{ $image->temporaryUrl() }}" class="img-fluid" alt="Фото">
+                @dump()
             </div>
         @endif
     </div>

@@ -1,5 +1,5 @@
 <div class="container">
-    <h1 class="mb-4">Редактирование продукта</h1>
+    <h1 class="mb-4 text-dark-emphasis border-bottom pb-2">Редактирование продукта</h1>
     <div class="d-flex justify-content-between align-items-center">
         <livewire:admin.helper.select-role/>
         <livewire:admin.helper.search-field/>
