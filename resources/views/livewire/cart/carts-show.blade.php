@@ -75,9 +75,6 @@
             <div class="col-lg-4">
                 <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
                     <div class="card-body">
-                        <button wire:click="selectAll" class="btn btn-outline-secondary w-100 mt-2">
-                            Выбрать все/Убрать все
-                        </button>
                         <h5 class="card-title">Ваш заказ</h5>
                         <p class="d-flex justify-content-between">
                             <span>Товары:</span>
@@ -104,6 +101,9 @@
                         <a href="{{ route('home') }}" class="btn btn-outline-secondary w-100 mt-2">
                             <i class="fas fa-arrow-left"></i> Продолжить покупки
                         </a>
+                        <button wire:click="selectAll" class="btn btn-outline-secondary w-100 mt-2">
+                            <i class="fas fa-arrow-left"></i>Выбрать все/Убрать все
+                        </button>
                     </div>
                 </div>
             </div>
