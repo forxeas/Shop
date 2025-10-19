@@ -2,22 +2,22 @@
 
 namespace App\Livewire\Auth;
 
-use App\Models\CartItem;
-use App\Models\User;
-use Auth;
-use Cookie;
-use Hash;
+use App\Contracts\NotifierInterface;
+use App\Services\Auth\AuthService;
+use App\Services\ExceptionHandlerService;
+use App\Services\Messages\LivewireNotifier;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
-use Log;
-use Throwable;
-
 
 #[Layout('components.layouts.app', ['title' => 'Регистрация'])]
 class UserRegister extends Component
 {
+    protected AuthService $service;
+    protected NotifierInterface $messageService;
+    protected ExceptionHandlerService $exceptionHandlerService;
+
     #[Validate('required|string|min:2|max:255')]
     public string $name = '';
 
@@ -30,39 +30,34 @@ class UserRegister extends Component
     #[Validate('nullable|boolean')]
     public bool $remember;
 
-    public function register()
+    public function boot
+    (
+        AuthService             $authService,
+        NotifierInterface       $livewireNotifier,
+        ExceptionHandlerService $exceptionHandlerService
+    ): void
     {
-        try{
+        /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
 
+        $this->service                 = $authService;
+        $this->messageService          = $livewireNotifier ;
+        $this->exceptionHandlerService = $exceptionHandlerService;
+
+        $this->messageService->setComponent($this);
+    }
+
+    public function register(): void
+    {
         $validated = $this->validate();
         $remember = $validated['remember'] ?? false;
         unset($validated['remember']);
 
-        $user = User::create(
-            [
-               'name' => $validated['name'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password'])
-            ]
+        $this->exceptionHandlerService->catchToException
+        (
+            fn() => $this->service->registerUser($validated, $remember),
+            'Ошибка при регистрации. Попробуйте еще раз.',
+            'UserRegister: fail to register user'
         );
-
-        Auth::login($user, $remember);
-
-            if(Cookie::has('cartGuestId')) {
-                $cart_id = Cookie::get('cartGuestId');
-                CartItem::query()
-                    ->where('guest_id', $cart_id)
-                    ->delete();
-                Cookie::queue(Cookie::forget('cartGuestId'));
-            }
-
-        return redirect()->route('home');
-
-        } catch(Throwable $e) {
-            Log::error('Ошибка регистрации: '.$e->getMessage());
-            session()->flash('error', 'Ошибка при регистрации. Попробуйте еще раз.');
-            return redirect()->route('register');
-        }
     }
 
     public function render(): View

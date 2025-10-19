@@ -30,7 +30,7 @@ class CartsShow extends Component
 
     public function boot
     (
-        NotifierInterface $livewireNotifier,
+        NotifierInterface       $livewireNotifier,
         CartService             $cartService,
         CartSummaryService      $CartSummaryService,
         ExceptionHandlerService $exceptService
