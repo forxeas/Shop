@@ -58,6 +58,8 @@ class UserRegister extends Component
             'Ошибка при регистрации. Попробуйте еще раз.',
             'UserRegister: fail to register user'
         );
+
+        $this->redirect(route('home'));
     }
 
     public function render(): View

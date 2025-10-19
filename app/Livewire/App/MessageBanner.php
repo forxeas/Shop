@@ -12,7 +12,7 @@ class MessageBanner extends Component
     public string $type    = 'success';
 
     #[On('set-message')]
-    public function setMessage(string $message, string $type): void
+    public function setMessage(string $message, string $type = 'success'): void
     {
         $this->message = $message;
         $this->type    = $type;

@@ -24,6 +24,10 @@ class UserRegisterTest extends TestCase
     {
         $this->createUser();
 
+        Livewire::test('auth.user-register')
+            ->call('register')
+            ->assertRedirect('route("home")');
+
         $this->assertDatabaseHas('users',
             [
                 'email' => 'test@example.com',
