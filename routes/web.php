@@ -13,6 +13,7 @@ use App\Livewire\Privileges\ProductCreate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', MainShow::class)->name('home');
+Route::get('/cart', CartsShow::class)->name('cart');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', UserRegister::class)->name('register');
@@ -24,7 +25,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', UserLogout::class)->name('logout');
 
     Route::get('/product/create', ProductCreate::class)->name('product.create');
-    Route::get('/cart', CartsShow::class)->name('cart');
 
     Route::get('order', Order::class)->name('order');
 

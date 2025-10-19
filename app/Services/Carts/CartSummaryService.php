@@ -48,7 +48,7 @@ class CartSummaryService
         return Cache::get('user: ' . $userId  . 'cart_total');
     }
 
-    public function calculateTotal(int $userId, Collection $cartItem, array $checkedItem): array
+        public function calculateTotal(string $userId, Collection $cartItem, array $checkedItem): array
     {
         if (Cache::has('user: ' . $userId  . 'cart_total')) {
             return $this->getCartTotal($userId);

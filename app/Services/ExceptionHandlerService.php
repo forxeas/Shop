@@ -22,17 +22,19 @@ class ExceptionHandlerService
         callable $action,
         string   $message,
         string   $logMessage,
-    ): void
+    ): mixed
     {
         try {
-            $action();
+            return  $action();
         } catch (Throwable $e) {
             $this->messageService->notify($message, 'error');
 
             Log::critical($logMessage . ': ' . $e->getMessage());
             $this->message = $this->messageService->getMessage();
         }
+        return null;
     }
+
     public function catchExceptionFinally
     (
         callable $action,

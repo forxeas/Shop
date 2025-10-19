@@ -10,8 +10,9 @@ return new class extends Migration
     {
         Schema::create('cart_items', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->uuid('guest_id')->nullable()->index();
             $table->unsignedInteger('quantity')->default(1);
             $table->unsignedInteger('price')->default(0);
             $table->unsignedInteger('discount')->default(0);
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['user_id', 'product_id']);
+            $table->unique(['guest_id', 'product_id']);
         });
     }
 

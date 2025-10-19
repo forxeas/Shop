@@ -5,7 +5,8 @@ namespace App\Providers;
 use App\Contracts\NotifierInterface;
 use App\Enums\RoleEnum;
 use App\Models\User;
-use App\Services\Messages\MessageService;
+use App\Services\Messages\LivewireNotifier;
+use App\Services\Messages\MessageNotifier;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use ReflectionException;
@@ -17,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        app()->bind(NotifierInterface::class, MessageService::class);
+        app()->bind(NotifierInterface::class, LivewireNotifier::class);
     }
 
     public function boot(): void

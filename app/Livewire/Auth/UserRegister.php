@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\CartItem;
 use App\Models\User;
 use Auth;
+use Cookie;
 use Hash;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -46,7 +48,14 @@ class UserRegister extends Component
 
         Auth::login($user, $remember);
 
-        session()->flash('success', 'Вы успешно зарегистрировались!');
+            if(Cookie::has('cartGuestId')) {
+                $cart_id = Cookie::get('cartGuestId');
+                CartItem::query()
+                    ->where('guest_id', $cart_id)
+                    ->delete();
+                Cookie::queue(Cookie::forget('cartGuestId'));
+            }
+
         return redirect()->route('home');
 
         } catch(Throwable $e) {

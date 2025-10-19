@@ -17,6 +17,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ route('login') }}" wire:navigate>Вход</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ route('cart') }}" wire:navigate>Корзина</a>
+                        </li>
                     @endguest
                     @auth
                         <li class="nav-item">
@@ -25,9 +28,9 @@
                                 Личный кабинет
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('cart') }}" wire:navigate>Корзина</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ route('cart') }}" wire:navigate>Корзина</a>
+                            </li>
                         <li class="nav-item">
                                 <a href="javascript:void(0);" class="nav-link active" onclick="window.history.back();">
                                     Назад
@@ -72,8 +75,7 @@
         </div>
     </nav>
     <div class="my-3">
-        <x-app.success />
-        <x-app.error />
+        <livewire:app.message-banner />
     </div>
 </div>
 

@@ -3,7 +3,9 @@
 namespace App\Services\Carts;
 
 use App\Models\CartItem;
+use Auth;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cookie;
 use RuntimeException;
 
 class CartService
@@ -66,5 +68,10 @@ class CartService
             ->where('cart_items.user_id', '=', $userId)
             ->whereIn('cart_items.id', $selected)
             ->update(['selected' => true]);
+    }
+
+    public function GuestUserId(): string
+    {
+        return Cookie::get('cartGuestId');
     }
 }

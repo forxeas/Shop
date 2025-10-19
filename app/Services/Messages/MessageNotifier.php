@@ -5,7 +5,7 @@ namespace App\Services\Messages;
 use App\Contracts\NotifierInterface;
 use Event;
 
-class MessageService implements NotifierInterface
+class MessageNotifier implements NotifierInterface
 {
     public ?string $message = null;
     private string $type = 'info';

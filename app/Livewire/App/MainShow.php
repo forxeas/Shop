@@ -2,26 +2,51 @@
 
 namespace App\Livewire\App;
 
-use App\Models\CartItem;
-use App\Models\Product;
+use App\Contracts\NotifierInterface;
+use App\Services\App\MainShowService;
+use App\Services\ExceptionHandlerService;
+use App\Services\Messages\LivewireNotifier;
 use Auth;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('components.layouts.app', ['title' => 'Shop'])]
 class MainShow extends Component
 {
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
+    protected MainShowService $mainShowService;
+    protected ExceptionHandlerService $exceptionHandlerService;
+    protected NotifierInterface $messageService;
 
     #[Url]
     public string $search = '';
+    public ?int $userId = null;
+    public ?string $guestId = null;
+    public function boot
+    (
+        NotifierInterface $livewireNotifier,
+        ExceptionHandlerService $ExceptionHandlerService,
+        MainShowService $MainShowService
+    ): void
+    {
+        $this->userId = Auth::id();
+
+        /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
+
+        $this->messageService = $livewireNotifier;
+        $this->messageService->setComponent($this);
+        $this->exceptionHandlerService = $ExceptionHandlerService;
+        $this->mainShowService = $MainShowService;
+
+        if(is_null($this->userId)) {
+            $this->guestId = $this->mainShowService->generateUserId();
+        }
+    }
 
     #[On('changeSearch')]
     public function changeSearch($search): void
@@ -30,53 +55,44 @@ class MainShow extends Component
         $this->resetPage();
     }
 
-    public function addingToCart(int $productId)
+    public function addToCart(int $productId): void
     {
-        if (! auth()->check()) {
-            return $this->redirect(route('login'));
-        }
-
-        $product = Product::query()->where('id', '=', $productId)->first();
-        CartItem::query()->create(
-            [
-                'user_id'    => Auth::id(),
-                'product_id' => $productId,
-                'price'      => $product->price,
-                'discount'   => $product->discount,
-                'quantity'   => 1,
-            ]
+        $this->exceptionHandlerService->catchToException
+        (
+            fn() => $this->mainShowService->addToCart($this->userId,$productId),
+            'Не удалось добавить товар в корзину',
+            'MainShow: addToCart failed'
         );
-    }
-
-    private function applySearch(Builder $query): Builder
-    {
-        if (isset($this->search)) {
-            $query->where(function ($q) {
-                $q->where('products.name', 'like', "%{$this->search}%")
-                    ->orWhereHas('category', function ($subQ) {
-                        $subQ->where('categories.name', 'like', "%{$this->search}%");
-                    });
-                });
-        }
-        return $query;
     }
 
     public function render(): View
     {
-        $query = Product::query()
-            ->with(['category', 'user'])
-            ->orderByDesc('id');
+        $products = $this->search();
+        $addedCart = $this->addedCart();
 
-        $query = $this->applySearch($query);
+        return view('livewire.app.main-show')
+            ->with(['products' => $products, 'addedCart' => $addedCart])
+            ->title('shop');
+    }
 
-        $products = $query
-            ->Paginate(16);
+    private function search(): LengthAwarePaginator
+    {
+        return $this->exceptionHandlerService->catchToException
+        (
+            fn() => $this->mainShowService->applySearch
+            ($this->search, ['category', 'user'], 'created_at', 12),
+            'Не удалось загрузить товары',
+            'MainShow: search products failed'
+        );
+    }
 
-        $addedCart = CartItem::query()
-            ->where('user_id', '=', Auth::id())
-            ->pluck('product_id')
-            ->toArray();
-
-        return view('livewire.app.main-show')->with(['products' => $products, 'addedCart' => $addedCart]);
+    private function addedCart(): array
+    {
+        return $this->exceptionHandlerService->catchToException
+        (
+            fn() => $this->mainShowService->addedCart($this->userId, $this->guestId),
+            'Не удалось добавить товары',
+            'MainShow: addedCart failed'
+        );
     }
 }

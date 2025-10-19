@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,9 +9,23 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property int $category_id
+ * @property string $name
+ * @property float $discount
+ * @property string $description
+ * @property string $image
+ * @property string $slug
+ * @property float $price
+ */
 class Product extends Model
 {
-    use HasSlug, HasFactory;
+    use HasFactory;
+    use HasSlug;
+
     protected $fillable =
         [
             'user_id',

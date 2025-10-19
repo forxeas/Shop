@@ -14,7 +14,7 @@
                             </a>
                         @else
                             <button class="btn btn-dark-primary"
-                                    wire:click.debounce.300ms="addingToCart({{ $product->id }})">
+                                    wire:click.debounce.300ms="addToCart({{ $product->id }})">
                                 🛒
                             </button>
                         @endif

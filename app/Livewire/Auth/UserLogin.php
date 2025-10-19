@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\CartItem;
 use Auth;
 
+use Cookie;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -31,6 +33,14 @@ class UserLogin extends Component
             if(Auth::attempt($validated, $remember)) {
                 session()->flash('success', 'Вы успешно вошли в аккаунт!');
                 return redirect()->route('home');
+            }
+
+            if(Cookie::has('cartGuestId')) {
+                $cart_id = Cookie::get('cartGuestId');
+                CartItem::query()
+                    ->where('guest_id', $cart_id)
+                    ->delete();
+                Cookie::queue(Cookie::forget('cartGuestId'));
             }
 
             session()->flash('error', 'Неверный логин или пароль!');
