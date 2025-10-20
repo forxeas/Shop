@@ -23,44 +23,22 @@ class MainShowTest extends TestCase
 
     public function test_main_page_render_products(): void
     {
-        $user = User::factory()->create();
-        Product::factory()->count(3)->create(
-            [
-                'name' => 'Test Product',
-                'user_id'     => $user->id,
-                'category_id' => $this->category->id,
-            ]);
-
+        $this->createProduct();
         Livewire::test(MainShow::class)
             ->assertSee('Test Product');
     }
 
     public function test_main_page_renders_for_authenticated_user (): void
     {
-        Product::factory()->count(3)->create(
-            [
-                'name' => 'Test Product',
-                'user_id'     => $this->user->id,
-                'category_id' => $this->category->id,
-            ]);
+        $this->createProduct();
         Livewire::test(MainShow::class)
             ->assertSee('Test Product');
     }
 
     public function test_that_the_search_field_filters(): void
     {
-        Product::factory()->create(
-            [
-                'name' => 'anything',
-                'user_id'     => $this->user->id,
-                'category_id' => $this->category->id,
-            ]);
-        $product = Product::factory()->create(
-            [
-                'name' => 'UniqueProductName',
-                'user_id'     => $this->user->id,
-                'category_id' => $this->category->id,
-            ]);
+        $this->createProduct();
+        $this->createProduct(['name' => 'UniqueProductName']);
 
         Livewire::test(MainShow::class)
             ->call('changeSearch', 'Unique')
@@ -70,13 +48,7 @@ class MainShowTest extends TestCase
 
     public function test_add_to_cart_requires_authentication(): void
     {
-        $product = Product::factory()->create
-        (
-            [
-                'user_id' => $this->user->id,
-                'category_id' => $this->category->id,
-            ]
-        );
+        $product = $this->createProduct();
 
         Livewire::test(MainShow::class)
             ->call('addToCart', $product->id);
@@ -86,18 +58,25 @@ class MainShowTest extends TestCase
 
     public function test_add_to_cart_does_not_require_authentication(): void
     {
-        $user = User::factory()->create();
-        $product = Product::factory()->create
-        (
-            [
-                'user_id' => $user,
-                'category_id' => $this->category->id,
-            ]
-        );
+        $product = $this->createProduct();
 
         Livewire::test(MainShow::class)
             ->call('addToCart', $product->id);
 
         $this->assertDatabaseHas('products', ['id' => $product->id]);
     }
+
+    private function createProduct(array $overRides = []): Product
+    {
+        $data = array_merge
+        (
+            [
+                'name' => 'Test Product',
+                'user_id'     => $this->user->id,
+                'category_id' => $this->category->id,
+            ], $overRides
+        );
+
+        return Product::query()->create($data);
+        }
 }

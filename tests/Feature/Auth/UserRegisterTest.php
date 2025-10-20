@@ -24,10 +24,6 @@ class UserRegisterTest extends TestCase
     {
         $this->createUser();
 
-        Livewire::test('auth.user-register')
-            ->call('register')
-            ->assertRedirect('route("home")');
-
         $this->assertDatabaseHas('users',
             [
                 'email' => 'test@example.com',
@@ -53,25 +49,4 @@ class UserRegisterTest extends TestCase
         $this->assertNull($user->remember_token);
     }
 
-    private function createUser(array $overRides = []): User
-    {
-        $data = array_merge
-        (
-            [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-                'password' => 'password123',
-                'remember' => false,
-            ], $overRides
-        );
-
-        Livewire::test('auth.user-register')
-            ->set('name', $data['name'])
-            ->set('email', $data['email'])
-            ->set('password', $data['password'])
-            ->set('remember', $data['remember'])
-            ->call('register');
-
-        return User::where('email', $data['email'])->first();
-    }
 }

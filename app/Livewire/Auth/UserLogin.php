@@ -2,18 +2,21 @@
 
 namespace App\Livewire\Auth;
 
-use App\Models\CartItem;
-use Auth;
-
-use Cookie;
+use App\Contracts\NotifierInterface;
+use App\Services\Auth\AuthService;
+use App\Services\ExceptionHandlerService;
+use App\Services\Messages\LivewireNotifier;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
-use Log;
-use Throwable;
+
 
 class UserLogin extends Component
 {
+    protected AuthService $service;
+    protected NotifierInterface $messageService;
+    protected ExceptionHandlerService $exceptionHandlerService;
+
     #[Validate('required|email|max:255')]
     public string $email = '';
 
@@ -23,35 +26,36 @@ class UserLogin extends Component
     #[Validate('nullable|boolean')]
     public bool $remember;
 
-    public function authorization()
+    public function boot
+    (
+        AuthService             $authService,
+        NotifierInterface       $livewireNotifier,
+        ExceptionHandlerService $exceptionHandlerService
+    ): void
     {
-        try {
-            $validated = $this->validate();
-            $remember = $validated['remember'] ?? false;
-            unset($validated['remember']);
+        /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
 
-            if(Auth::attempt($validated, $remember)) {
-                session()->flash('success', 'Вы успешно вошли в аккаунт!');
-                return redirect()->route('home');
-            }
+        $this->exceptionHandlerService = $exceptionHandlerService;
 
-            if(Cookie::has('cartGuestId')) {
-                $cart_id = Cookie::get('cartGuestId');
-                CartItem::query()
-                    ->where('guest_id', $cart_id)
-                    ->delete();
-                Cookie::queue(Cookie::forget('cartGuestId'));
-            }
+        $this->messageService          = $livewireNotifier ;
+        $this->messageService->setComponent($this);
+        $this->service                 = $authService;
 
-            session()->flash('error', 'Неверный логин или пароль!');
-            return redirect()->route('login');
+        $this->exceptionHandlerService->boot($this->messageService, $this);
+    }
 
-        } catch(Throwable $e) {
-            Log::error('Ошибка регистрации: '.$e->getMessage());
-            session()->flash('error', 'Ошибка при авторизации. Попробуйте еще раз.');
-            return redirect()->route('login');
-        }
+    public function authorization(): void
+    {
+        $validated = $this->validate();
+        $remember  = $validated['remember'] ?? false;
+        unset($validated['remember']);
 
+        $this->exceptionHandlerService->catchToException
+        (
+            fn() => $this->service->loginUser($validated, $remember, $this),
+            'Не правильный пароль или логин.',
+            'UserLogin: fail to login user'
+        );
     }
     public function render(): View
     {

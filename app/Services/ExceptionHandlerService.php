@@ -4,13 +4,21 @@ namespace App\Services;
 
 use App\Contracts\NotifierInterface;
 use Illuminate\Support\Facades\Log;
+use Livewire\Component;
 use Throwable;
 
 class ExceptionHandlerService
 {
     protected ?string $message = null;
-    public function __construct(protected NotifierInterface $messageService)
+    protected NotifierInterface $messageService;
+    public function boot
+    (
+        NotifierInterface $messageService,
+        Component $component
+    ): void
     {
+        $this->messageService = $messageService;
+        $this->messageService->setComponent($component);
     }
 
     public function getMessage(): string
@@ -18,6 +26,9 @@ class ExceptionHandlerService
         return $this->message;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function catchToException(
         callable $action,
         string   $message,
@@ -35,6 +46,9 @@ class ExceptionHandlerService
         return null;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function catchExceptionFinally
     (
         callable $action,

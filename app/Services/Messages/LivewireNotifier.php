@@ -21,7 +21,7 @@ class LivewireNotifier implements NotifierInterface
         $this->message = $message;
         $this->type    = $type;
 
-        $this->component->dispatch('set-message', ['message' => $message, 'type'    => $type]);
+        $this->component->dispatch('set-message', ['message' => $message, 'type' => $type]);
     }
 
     public function clear(): void

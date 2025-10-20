@@ -11,11 +11,16 @@ class MessageBanner extends Component
     public string $message = '';
     public string $type    = 'success';
 
-    #[On('set-message')]
-    public function setMessage(string $message, string $type = 'success'): void
+    public function mount(): void
     {
-        $this->message = $message;
-        $this->type    = $type;
+        $this->message = (string) session('success');
+    }
+
+    #[On('set-message')]
+    public function setMessage(array $message): void
+    {
+        $this->message = $message['message'];
+        $this->type    = $message['type'];
     }
 
     #[On('clear-message')]

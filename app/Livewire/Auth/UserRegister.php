@@ -7,11 +7,9 @@ use App\Services\Auth\AuthService;
 use App\Services\ExceptionHandlerService;
 use App\Services\Messages\LivewireNotifier;
 use Illuminate\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
-#[Layout('components.layouts.app', ['title' => 'Регистрация'])]
 class UserRegister extends Component
 {
     protected AuthService $service;
@@ -39,11 +37,12 @@ class UserRegister extends Component
     {
         /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
 
-        $this->service                 = $authService;
         $this->messageService          = $livewireNotifier ;
+        $this->messageService->setComponent($this);
+
+        $this->service                 = $authService;
         $this->exceptionHandlerService = $exceptionHandlerService;
 
-        $this->messageService->setComponent($this);
     }
 
     public function register(): void
@@ -54,16 +53,15 @@ class UserRegister extends Component
 
         $this->exceptionHandlerService->catchToException
         (
-            fn() => $this->service->registerUser($validated, $remember),
+            fn() => $this->service->registerUser($validated, $remember, $this),
             'Ошибка при регистрации. Попробуйте еще раз.',
             'UserRegister: fail to register user'
         );
-
-        $this->redirect(route('home'));
     }
 
     public function render(): View
     {
-        return view('livewire.auth.user-register');
+        return view('livewire.auth.user-register')
+            ->title('Регистрация');
     }
 }
