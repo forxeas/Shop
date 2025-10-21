@@ -58,11 +58,11 @@ class CartsShow extends Component
         $this->calculateTotal();
     }
 
-    public function incrementQuantity(int $id): void
+    public function incrementQuantity(int $productId): void
     {
         $this->exceptService->catchExceptionFinally
         (
-            fn () => $this->cartService->increment($id, $this->cartItems),
+            fn () => $this->cartService->increment($productId, $this->cartItems),
             'Произошла ошибка при увеличение количества товаров',
             'CartsShow: incrementQuantity error',
             function() {
@@ -71,11 +71,11 @@ class CartsShow extends Component
         );
     }
 
-    public function decrementQuantity(int $id): void
+    public function decrementQuantity(int $productId): void
     {
         $this->exceptService->catchExceptionFinally
         (
-            fn () => $this->cartService->decrement($id, $this->cartItems),
+            fn () => $this->cartService->decrement($productId, $this->cartItems),
             'Произошла ошибка при уменьшие количества товаров',
             'CartsShow: decrementQuantity error',
             function() {
@@ -117,7 +117,7 @@ class CartsShow extends Component
     {
         $this->exceptService->catchToException
         (
-            fn() => $this->cartService->saveSelected(Auth::id(), $this->checkedItems),
+            fn() => $this->cartService->saveSelected($this->userId, $this->checkedItems),
             'Не удалось сохранить выбранные товары',
             'CartsShow: save selected products error'
         );

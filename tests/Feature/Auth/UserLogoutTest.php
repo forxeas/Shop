@@ -12,7 +12,7 @@ class UserLogoutTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_logout_page_load_and_render(): void
+    public function test_logout_page_is_render_and_load(): void
     {
         $this->createUser();
 

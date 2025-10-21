@@ -8,9 +8,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property string $slug
+ */
+
 class Category extends Model
 {
-    use HasFactory, HasSlug;
+    use HasFactory;
+    use HasSlug;
+
     protected $fillable = ['name', 'description', 'slug',];
     public function getSlugOptions() : SlugOptions
     {
