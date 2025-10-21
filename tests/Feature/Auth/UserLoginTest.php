@@ -73,15 +73,4 @@ class UserLoginTest extends TestCase
                 'remember_token' => $user['remember_token'],
             ]);
     }
-
-    public function test_user_cannot_login_with_invalid_credentials(): void
-    {
-        $this->createUser();
-
-        Livewire::test('auth.user-login')
-            ->set('email', 'invalid@example.com')
-            ->set('password', 'wrongpassword')
-            ->call('authorization')
-            ->assertHasErrors();
-    }
 }

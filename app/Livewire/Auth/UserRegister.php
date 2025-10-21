@@ -2,20 +2,12 @@
 
 namespace App\Livewire\Auth;
 
-use App\Contracts\NotifierInterface;
-use App\Services\Auth\AuthService;
-use App\Services\ExceptionHandlerService;
-use App\Services\Messages\LivewireNotifier;
+use App\Abstracts\AbstractAuthComponent;
 use Illuminate\View\View;
 use Livewire\Attributes\Validate;
-use Livewire\Component;
 
-class UserRegister extends Component
+class UserRegister extends AbstractAuthComponent
 {
-    protected AuthService $service;
-    protected NotifierInterface $messageService;
-    protected ExceptionHandlerService $exceptionHandlerService;
-
     #[Validate('required|string|min:2|max:255')]
     public string $name = '';
 
@@ -27,23 +19,6 @@ class UserRegister extends Component
 
     #[Validate('nullable|boolean')]
     public bool $remember;
-
-    public function boot
-    (
-        AuthService             $authService,
-        NotifierInterface       $livewireNotifier,
-        ExceptionHandlerService $exceptionHandlerService
-    ): void
-    {
-        /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
-
-        $this->messageService          = $livewireNotifier ;
-        $this->messageService->setComponent($this);
-
-        $this->service                 = $authService;
-        $this->exceptionHandlerService = $exceptionHandlerService;
-
-    }
 
     public function register(): void
     {

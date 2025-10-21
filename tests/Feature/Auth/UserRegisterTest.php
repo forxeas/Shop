@@ -40,7 +40,11 @@ class UserRegisterTest extends TestCase
     public function test_register_page_remember_me(): void
     {
         $user = $this->createUser(['remember' => true]);
-        $this->assertNotNull($user->remember_token);
+
+        $this->assertDatabaseHas('users',
+            [
+                'remember_token' => $user['remember_token'],
+            ]);
     }
 
     public function test_register_page_not_remember_me(): void

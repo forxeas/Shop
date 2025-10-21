@@ -2,29 +2,20 @@
 
 namespace App\Livewire\Auth;
 
-use App\Models\CartItem;
-use Auth;
-use Cookie;
+use App\Abstracts\AbstractAuthComponent;
 use Illuminate\View\View;
-use Livewire\Component;
 
-class UserLogout extends Component
+class UserLogout extends AbstractAuthComponent
 {
+
     public function logout(): void
     {
-        Auth::logout();
-        session()->invalidate();
-        session()->regenerateToken();
-
-        if(Cookie::has('cartGuestId')) {
-            $cart_id = Cookie::get('cartGuestId');
-            CartItem::query()
-                ->where('cart_id', '=', $cart_id)
-                ->delete();
-            Cookie::queue(Cookie::forget('cartGuestId'));
-        }
-
-        redirect()->route('home');
+        $this->exceptionHandlerService->catchToException
+        (
+            fn() => $this->service->logoutUser($this),
+            'Произошла ошибка при выходе из аккаунта',
+            'UserLogout: Error to logout with account'
+        );
     }
 
     public function render(): View
