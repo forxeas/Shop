@@ -95,7 +95,7 @@
                                 {{ number_format($totalWithDiscount, 2, '.', ' ') }} ₽
                             </span>
                         </p>
-                        <a href="{{ route('order') }}" class="btn btn-primary w-100 btn-lg">
+                        <a href="{{ route('order') }}" wire:click="saveSelected" class="btn btn-primary w-100 btn-lg">
                             Перейти к оплате <i class="fas fa-arrow-right"></i>
                         </a>
                         <a href="{{ route('home') }}" class="btn btn-outline-secondary w-100 mt-2">

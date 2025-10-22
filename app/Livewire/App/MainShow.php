@@ -5,7 +5,7 @@ namespace App\Livewire\App;
 use App\Contracts\NotifierInterface;
 use App\Services\App\MainShowService;
 use App\Services\ExceptionHandlerService;
-use App\Services\Messages\LivewireNotifier;
+use App\Services\Message\LivewireNotifier;
 use Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;

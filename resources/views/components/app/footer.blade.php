@@ -14,7 +14,7 @@
                 </svg>
             </a>
         </li>
-        <li class="ms-3"><a class="text-body-secondary p-1" href="discordapp.com/users/742759174009651211"
+        <li class="ms-3"><a class="text-body-secondary p-1" href="https://discord.com/users/742759174009651211"
                             aria-label="discord">
                 <svg class="bi" width="24" height="24">
                     <x-tabler-brand-discord class="w-6 h-6" />

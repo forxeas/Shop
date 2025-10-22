@@ -5,7 +5,7 @@ namespace App\Abstracts;
 use App\Contracts\NotifierInterface;
 use App\Services\Auth\AuthService;
 use App\Services\ExceptionHandlerService;
-use App\Services\Messages\LivewireNotifier;
+use App\Services\Message\LivewireNotifier;
 use Livewire\Component;
 
 abstract class AbstractAuthComponent extends Component

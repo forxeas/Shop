@@ -8,7 +8,7 @@ enum RoleEnum: string
     case SALER = 'saler';
     case CUSTOMER = 'customer';
 
-    static public function getRole(RoleEnum $role): string
+    public static function getRole(RoleEnum $role): string
     {
         return match ($role) {
             self::ADMIN => 'admin',
@@ -17,7 +17,7 @@ enum RoleEnum: string
         };
     }
 
-    static public function getValues(): array
+    public static function getValues(): array
     {
         return array_map(fn($case) => $case->value, self::cases());
     }

@@ -3,10 +3,10 @@
 namespace App\Livewire\Cart;
 
 use App\Contracts\NotifierInterface;
-use App\Services\Carts\CartService;
-use App\Services\Carts\CartSummaryService;
+use App\Services\Cart\CartService;
+use App\Services\Cart\CartSummaryService;
 use App\Services\ExceptionHandlerService;
-use App\Services\Messages\LivewireNotifier;
+use App\Services\Message\LivewireNotifier;
 use Auth;
 use Cookie;
 use Illuminate\View\View;
@@ -30,7 +30,7 @@ class CartsShow extends Component
 
     public function boot
     (
-        NotifierInterface       $livewireNotifier,
+        NotifierInterface       $notifier,
         CartService             $cartService,
         CartSummaryService      $CartSummaryService,
         ExceptionHandlerService $exceptService
@@ -38,7 +38,7 @@ class CartsShow extends Component
     {
         /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
 
-        $this->messageService = $livewireNotifier;
+        $this->messageService = $notifier;
         $this->messageService->setComponent($this);
         $this->cartService = $cartService;
         $this->cartSummaryService = $CartSummaryService;

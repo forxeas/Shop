@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Carts;
+namespace App\Services\Cart;
 
 use App\Models\CartItem;
 use Auth;
@@ -60,10 +60,6 @@ class CartService
 
     public function saveSelected(int $userId, array $selected): void
     {
-        CartItem::query()
-            ->where('cart_items.user_id', '=', $userId)
-            ->update(['selected' => false]);
-
         CartItem::query()
             ->where('cart_items.user_id', '=', $userId)
             ->whereIn('cart_items.id', $selected)

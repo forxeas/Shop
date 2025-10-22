@@ -34,6 +34,17 @@
             </div>
 
             <div class="mb-3">
+                <label for="discount" class="form-label">Ваша скидка на товар</label>
+                <input type="number" step="0.01" class="form-control @error('discount') is-invalid @enderror"
+                       id="discount"
+                       placeholder="Цена"
+                       wire:model.blur="discount">
+                @error('price')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
                 <label for="category_id" class="form-label">Выберите подходящую категорию</label>
                 <select class="form-select @error('category_id') is-invalid @enderror" id="category_id"
                         wire:model.blur="category_id">
@@ -62,7 +73,6 @@
         @if($image && is_object($image))
             <div class="h-25 mt-3">
                 <img src="{{ $image->temporaryUrl()}}" class="img-fluid" alt="Фото">
-                @dump()
             </div>
         @endif
     </div>

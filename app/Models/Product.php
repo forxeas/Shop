@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-
 /**
  * @property int $id
  * @property int $user_id
@@ -21,6 +20,7 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $slug
  * @property float $price
  */
+
 class Product extends Model
 {
     use HasFactory;
@@ -34,7 +34,8 @@ class Product extends Model
             'description',
             'image',
             'slug',
-            'price'
+            'price',
+            'discount'
         ];
 
     public function getSlugOptions() : SlugOptions

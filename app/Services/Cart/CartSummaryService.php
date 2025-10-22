@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Carts;
+namespace App\Services\Cart;
 
 use App\Models\CartItem;
 use Auth;

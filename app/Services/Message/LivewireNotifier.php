@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Messages;
+namespace App\Services\Message;
 
 use App\Contracts\NotifierInterface;
 use Livewire\Component;

@@ -25,15 +25,16 @@ class ProductCreate extends Component
     #[Validate('required|numeric|min:0')]
     public float $price;
 
+    #[Validate('required|numeric|min:0')]
+    public float $discount;
+
     #[Validate('required|numeric|exists:categories,id')]
     public string $category_id;
 
-    #[Validate('nullable|image|max:2048')]
+    #[Validate('nullable|image|max:10240')]
     public $image = '';
 
     public $categories;
-
-//    protected $casts = ['price' => 'decimal:2'];
 
     public function mount():void
     {
@@ -50,6 +51,7 @@ class ProductCreate extends Component
                 'description' => $validated['description'],
                 'category_id' => $validated['category_id'],
                 'price'       => $validated['price'],
+                'discount'    => $validated['discount'],
             ];
 
         if($validated['image']) {
@@ -58,7 +60,7 @@ class ProductCreate extends Component
 
         Product::query()->create($data);
 
-        session()->flash('success', 'Продукт успешно добавлен!');
+        session()?->flash('success', 'Продукт успешно добавлен!');
         $this->reset('name', 'category_id', 'description', 'price', 'image');
         redirect()->route('home');
     }
