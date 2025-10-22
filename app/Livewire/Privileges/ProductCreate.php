@@ -28,7 +28,7 @@ class ProductCreate extends Component
     #[Validate('required|numeric|exists:categories,id')]
     public string $category_id;
 
-    #[Validate('nullable|image|max:2048')]
+    #[Validate('nullable|image|max:10240')]
     public $image = '';
 
     public $categories;
@@ -58,7 +58,7 @@ class ProductCreate extends Component
 
         Product::query()->create($data);
 
-        session()->flash('success', 'Продукт успешно добавлен!');
+        session()?->flash('success', 'Продукт успешно добавлен!');
         $this->reset('name', 'category_id', 'description', 'price', 'image');
         redirect()->route('home');
     }
