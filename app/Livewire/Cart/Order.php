@@ -20,9 +20,10 @@ class Order extends Component
     protected OrderService            $orderService;
     protected ExceptionHandlerService $exceptionService;
 
-    public string             $userId = '';
+    public string             $userId   = '';
     public array              $products = [];
     public string             $payment  = PaymentEnum::CASH->value;
+    public string             $address  = '';
     public function boot
     (
         NotifierInterface $messageService,

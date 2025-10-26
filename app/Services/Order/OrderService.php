@@ -5,13 +5,11 @@ namespace App\Services\Order;
 use App\Models\CartItem;
 use Auth;
 use Cookie;
-use http\Exception\RuntimeException;
 
 class OrderService
 {
     public function getProduct(string $userId): array
     {
-        throw new RuntimeException('dsa');
         $orders = CartItem::query()
             ->where('cart_items.selected', '=', 1)
             ->where(function ($builder) use($userId) {

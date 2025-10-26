@@ -34,5 +34,7 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    'mapTG' => [
+        'key' => env('MAP_TG_KEY'),
+    ]
 ];
