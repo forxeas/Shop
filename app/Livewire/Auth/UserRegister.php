@@ -26,7 +26,7 @@ class UserRegister extends AbstractAuthComponent
         $remember = $validated['remember'] ?? false;
         unset($validated['remember']);
 
-        $this->exceptionHandlerService->catchToException
+        $this->exceptionService->catchToException
         (
             fn() => $this->service->registerUser($validated, $remember, $this),
             'Ошибка при регистрации. Попробуйте еще раз.',

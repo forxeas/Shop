@@ -3,19 +3,32 @@
 namespace App\Services\Order;
 
 use App\Models\CartItem;
+use Auth;
+use Cookie;
+use http\Exception\RuntimeException;
 
 class OrderService
 {
-    public function getProduct(): array
+    public function getProduct(string $userId): array
     {
-        $items = CartItem::query()
-            ->where('cart_items.user_id', auth()->id())
+        throw new RuntimeException('dsa');
+        $orders = CartItem::query()
             ->where('cart_items.selected', '=', 1)
+            ->where(function ($builder) use($userId) {
+                $builder
+                    ->where('cart_items.user_id', '=', $userId)
+                    ->orWhere('cart_items.guest_id', '=', $userId);
+            })
             ->get();
 
-        $total = $items->sum(function ($item) {
+        $total = $orders->sum(function ($item) {
             return ($item->price - $item->discount) * $item->quantity;
         });
-        return ['items' => $items, 'total' => $total];
+        return ['orders' => $orders, 'total' => $total];
+    }
+
+    public function getUser(): string
+    {
+        return Auth::id() ?? Cookie::get('cartGuestId');
     }
 }

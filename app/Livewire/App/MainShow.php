@@ -20,7 +20,7 @@ class MainShow extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected MainShowService $mainShowService;
-    protected ExceptionHandlerService $exceptionHandlerService;
+    protected ExceptionHandlerService $exceptionService;
     protected NotifierInterface $messageService;
 
     #[Url]
@@ -29,23 +29,24 @@ class MainShow extends Component
     public ?string $guestId = null;
     public function boot
     (
-        NotifierInterface $livewireNotifier,
-        ExceptionHandlerService $ExceptionHandlerService,
+        NotifierInterface $notifier,
+        ExceptionHandlerService $exceptionService,
         MainShowService $MainShowService
     ): void
     {
         $this->userId = Auth::id();
 
-        /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
+        /** @var NotifierInterface|LivewireNotifier $notifier */
 
-        $this->messageService = $livewireNotifier;
+        $this->messageService = $notifier;
         $this->messageService->setComponent($this);
-        $this->exceptionHandlerService = $ExceptionHandlerService;
+        $this->exceptionService = $exceptionService;
         $this->mainShowService = $MainShowService;
 
         if(is_null($this->userId)) {
             $this->guestId = $this->mainShowService->generateUserId();
         }
+        $this->exceptionService->boot($this->messageService, $this);
     }
 
     #[On('changeSearch')]
@@ -57,7 +58,7 @@ class MainShow extends Component
 
     public function addToCart(int $productId): void
     {
-        $this->exceptionHandlerService->catchToException
+        $this->exceptionService->catchToException
         (
             fn() => $this->mainShowService->addToCart($this->userId,$productId),
             'Не удалось добавить товар в корзину',
@@ -77,7 +78,7 @@ class MainShow extends Component
 
     private function search(): LengthAwarePaginator
     {
-        return $this->exceptionHandlerService->catchToException
+        return $this->exceptionService->catchToException
         (
             fn() => $this->mainShowService->applySearch
             ($this->search, ['category', 'user'], 'created_at', 12),
@@ -88,7 +89,7 @@ class MainShow extends Component
 
     private function addedCart(): array
     {
-        return $this->exceptionHandlerService->catchToException
+        return $this->exceptionService->catchToException
         (
             fn() => $this->mainShowService->addedCart($this->userId, $this->guestId),
             'Не удалось добавить товары',

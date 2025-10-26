@@ -17,7 +17,7 @@ class CartsShow extends Component
     protected NotifierInterface       $messageService;
     protected CartService             $cartService;
     protected CartSummaryService      $cartSummaryService;
-    protected ExceptionHandlerService $exceptService;
+    protected ExceptionHandlerService $exceptionService;
     public                            $cartItems;
     public string $userId;
     public array  $checkedItems = [];
@@ -30,26 +30,28 @@ class CartsShow extends Component
 
     public function boot
     (
-        NotifierInterface       $notifier,
+        NotifierInterface       $messageService,
         CartService             $cartService,
         CartSummaryService      $CartSummaryService,
-        ExceptionHandlerService $exceptService
+        ExceptionHandlerService $exceptionService
     ): void
     {
-        /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
+        /** @var NotifierInterface|LivewireNotifier $messageService */
 
-        $this->messageService = $notifier;
+        $this->messageService = $messageService;
         $this->messageService->setComponent($this);
         $this->cartService = $cartService;
         $this->cartSummaryService = $CartSummaryService;
-        $this->exceptService = $exceptService;
+        $this->exceptionService = $exceptionService;
+
+        $this->exceptionService->boot($this->messageService, $this);
     }
 
     public function mount(): void
     {
         $this->userId = Auth::id() ?? $this->cartService->GuestUserId();
         $this->loadCart();
-        $this->exceptService->catchToException
+        $this->exceptionService->catchToException
         (
             fn() =>($this->checkedItems = $this->cartSummaryService->getCheckedItems()),
             'Произошла ошибка при загрузке выбранных товаров',
@@ -60,7 +62,7 @@ class CartsShow extends Component
 
     public function incrementQuantity(int $productId): void
     {
-        $this->exceptService->catchExceptionFinally
+        $this->exceptionService->catchExceptionFinally
         (
             fn () => $this->cartService->increment($productId, $this->cartItems),
             'Произошла ошибка при увеличение количества товаров',
@@ -73,7 +75,7 @@ class CartsShow extends Component
 
     public function decrementQuantity(int $productId): void
     {
-        $this->exceptService->catchExceptionFinally
+        $this->exceptionService->catchExceptionFinally
         (
             fn () => $this->cartService->decrement($productId, $this->cartItems),
             'Произошла ошибка при уменьшие количества товаров',
@@ -86,7 +88,7 @@ class CartsShow extends Component
 
     public function deleteProduct(int $id): void
     {
-        $this->exceptService->catchExceptionFinally
+        $this->exceptionService->catchExceptionFinally
         (
             fn () => $this->cartService->delete($id),
             'Произошла ошибка при удалении товара',
@@ -100,7 +102,7 @@ class CartsShow extends Component
 
     public function calculateTotal(): void
     {
-        $this->exceptService->catchToException
+        $this->exceptionService->catchToException
         (
             function() {
                 $total = $this->cartSummaryService->calculateTotal($this->userId, $this->cartItems, $this->checkedItems);
@@ -115,7 +117,7 @@ class CartsShow extends Component
 
     public function saveSelected(): void
     {
-        $this->exceptService->catchToException
+        $this->exceptionService->catchToException
         (
             fn() => $this->cartService->saveSelected($this->userId, $this->checkedItems),
             'Не удалось сохранить выбранные товары',
@@ -125,7 +127,7 @@ class CartsShow extends Component
 
     public function selectAll(): void
     {
-        $this->exceptService->catchExceptionFinally
+        $this->exceptionService->catchExceptionFinally
         (
             fn() => $this->checkedItems = $this->cartService->selectAll($this->userId, $this->checkedItems),
             'Не удалось выбрать все в корзине',
@@ -145,7 +147,7 @@ class CartsShow extends Component
 
     private function loadCart(): void
     {
-        $this->exceptService->catchToException
+        $this->exceptionService->catchToException
         (
             fn () => $this->cartItems = $this->cartSummaryService->getCartItems(),
             'Произошла ошибка при загрузке корзины',
@@ -155,7 +157,7 @@ class CartsShow extends Component
 
     public function updatedCheckedItems(): void
     {
-        $this->exceptService->catchToException
+        $this->exceptionService->catchToException
         (
             fn() => Cookie::queue(
                 'checked_items',

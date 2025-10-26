@@ -22,7 +22,7 @@
                 <div class="card-body">
                     <h5 class="card-title mb-3">Список товаров</h5>
                     <ul class="list-group list-group-flush">
-                        @foreach($items as $product)
+                        @foreach($orders as $product)
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <a href="{{ route('product', $product->product->slug) }}"
                                    class="link-offset-2 link-underline link-underline-opacity-10"

@@ -12,23 +12,25 @@ abstract class AbstractAuthComponent extends Component
 {
     protected AuthService $service;
     protected NotifierInterface $messageService;
-    protected ExceptionHandlerService $exceptionHandlerService;
+    protected ExceptionHandlerService $exceptionService;
 
     public function boot
     (
         AuthService             $authService,
-        NotifierInterface       $livewireNotifier,
-        ExceptionHandlerService $exceptionHandlerService
+        NotifierInterface       $messageService,
+        ExceptionHandlerService $exceptionService
     ): void
     {
-        /** @var NotifierInterface|LivewireNotifier $livewireNotifier */
+        /** @var NotifierInterface|LivewireNotifier $messageService */
 
-        $this->exceptionHandlerService = $exceptionHandlerService;
+        $this->exceptionService = $exceptionService;
 
-        $this->messageService          = $livewireNotifier ;
+        $this->messageService          = $messageService ;
         $this->messageService->setComponent($this);
         $this->service                 = $authService;
 
-        $this->exceptionHandlerService->boot($this->messageService, $this);
+        $this->exceptionService->boot($this->messageService, $this);
+
+        $this->exceptionService->boot($this->messageService, $this);
     }
 }

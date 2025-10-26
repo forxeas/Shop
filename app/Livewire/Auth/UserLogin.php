@@ -23,7 +23,7 @@ class UserLogin extends AbstractAuthComponent
         $remember  = $validated['remember'] ?? false;
         unset($validated['remember']);
 
-        $this->exceptionHandlerService->catchToException
+        $this->exceptionService->catchToException
         (
             fn() => $this->service->loginUser($validated, $remember, $this),
             'Не правильный пароль или логин.',

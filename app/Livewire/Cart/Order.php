@@ -4,9 +4,11 @@ namespace App\Livewire\Cart;
 
 use App\Contracts\NotifierInterface;
 use App\Enums\PaymentEnum;
+use App\Models\User;
 use App\Services\Cart\CartService;
 use App\Services\ExceptionHandlerService;
 use App\Services\Order\OrderService;
+use Auth;
 use Illuminate\View\View;
 use Livewire\Component;
 use Throwable;
@@ -16,24 +18,33 @@ class Order extends Component
     protected NotifierInterface       $messageService;
     protected CartService             $cartService;
     protected OrderService            $orderService;
-    protected ExceptionHandlerService $exceptService;
+    protected ExceptionHandlerService $exceptionService;
 
+    public string             $userId = '';
     public array              $products = [];
-    public string $payment  = PaymentEnum::CASH->value;
+    public string             $payment  = PaymentEnum::CASH->value;
     public function boot
     (
-        NotifierInterface $notifier,
+        NotifierInterface $messageService,
         CartService $cartService,
         OrderService $orderService,
-        ExceptionHandlerService $exceptService
+        ExceptionHandlerService $exceptionService
     ): void
     {
-        $this->messageService = $notifier;
+        $this->messageService = $messageService;
         $this->messageService->setComponent($this);
 
         $this->cartService = $cartService;
         $this->orderService = $orderService;
-        $this->exceptService = $exceptService;
+        $this->exceptionService = $exceptionService;
+
+        $this->exceptionService->boot($this->messageService, $this);
+    }
+
+    public function mount(): void
+    {
+        $this->userId = $this->orderService->getUser();
+        $this->getProducts();
     }
 
     /**
@@ -41,23 +52,21 @@ class Order extends Component
      */
     public function getProducts(): void
     {
-        $this->exceptService->catchToException
+        $this->exceptionService->catchToException
         (
-            fn() => $this->products = $this->orderService->getProduct(),
+            fn() => $this->products = $this->orderService->getProduct($this->userId),
             'Произошла ошибка при загрузке товаров для оформления заказа',
             'Order: error to loading products for order'
         );
     }
     public function render(): View
     {
-        $this->getProducts();
-
         return view('livewire.cart.order')
             ->with(
                 [
                     'title' => 'Оформление заказа',
-                    'items' => $this->products['items'],
-                    'total' => $this->products['total'],
+                    'orders' => $this->products['orders'] ?? collect(),
+                    'total' => $this->products['total'] ?? 0,
                 ]
             )
             ->title('Оформление заказов');

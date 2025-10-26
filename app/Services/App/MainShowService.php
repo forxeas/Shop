@@ -4,7 +4,6 @@ namespace App\Services\App;
 
 use App\Models\CartItem;
 use App\Models\Product;
-use http\Exception\RuntimeException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cookie;
 use Str;
@@ -19,7 +18,6 @@ class MainShowService
 
         /** @var Product $product */
         $product = Product::query()->findOrFail($productId);
-
         CartItem::query()->create(
             [
                 'user_id'    => $userId,

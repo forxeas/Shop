@@ -10,7 +10,7 @@ class UserLogout extends AbstractAuthComponent
 
     public function logout(): void
     {
-        $this->exceptionHandlerService->catchToException
+        $this->exceptionService->catchToException
         (
             fn() => $this->service->logoutUser($this),
             'Произошла ошибка при выходе из аккаунта',
