@@ -3,7 +3,6 @@
 namespace App\Services\Cart;
 
 use App\Models\CartItem;
-use Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
 use RuntimeException;
@@ -58,12 +57,22 @@ class CartService
         return [];
     }
 
-    public function saveSelected(int $userId, array $selected): void
+    public function saveSelected(int $userId, array $selected): bool
     {
+        if(empty($selected)) {
+            return false;
+        }
+
         CartItem::query()
             ->where('cart_items.user_id', '=', $userId)
             ->whereIn('cart_items.id', $selected)
             ->update(['selected' => true]);
+
+        CartItem::query()
+            ->where('cart_items.user_id', '=', $userId)
+            ->whereNotIn('cart_items.id', $selected)
+            ->update(['selected' => false]);
+        return true;
     }
 
     public function GuestUserId(): string

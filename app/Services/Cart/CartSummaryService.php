@@ -23,7 +23,7 @@ class CartSummaryService
             $serializeItems = json_encode($checkedItems, JSON_THROW_ON_ERROR);
 
             Cookie::queue('checked_items', $serializeItems, 60 * 24 * 30);
-            return $checkedItems;
+            return [];
         }
 
         return json_decode($cookie, true, 512, JSON_THROW_ON_ERROR) ?? [ ];

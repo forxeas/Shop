@@ -119,7 +119,14 @@ class CartsShow extends Component
     {
         $this->exceptionService->catchToException
         (
-            fn() => $this->cartService->saveSelected($this->userId, $this->checkedItems),
+            function() {
+                $res = $this->cartService->saveSelected($this->userId, $this->checkedItems);
+                if(!$res) {
+                    $this->messageService->notify('Выберите хотя-бы один товар', 'error');
+                    return;
+                }
+                    $this->redirect(route('order'));
+            },
             'Не удалось сохранить выбранные товары',
             'CartsShow: save selected products error'
         );

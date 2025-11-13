@@ -1,6 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Livewire\Cart;
+
 
 use App\Contracts\NotifierInterface;
 use App\Enums\PaymentEnum;
@@ -10,7 +12,10 @@ use App\Services\ExceptionHandlerService;
 use App\Services\Order\OrderService;
 use Auth;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Session;
 use Throwable;
 
 class Order extends Component
@@ -20,10 +25,27 @@ class Order extends Component
     protected OrderService            $orderService;
     protected ExceptionHandlerService $exceptionService;
 
-    public string             $userId   = '';
-    public array              $products = [];
-    public string             $payment  = PaymentEnum::CASH->value;
-    public string             $address  = '';
+    #[Validate('required|string|max:255')]
+    public string             $address;
+    #[Validate('required|string|min:18|max:18')]
+    public string             $phoneNumber;
+    #[Validate('bool')]
+    public bool               $rememberPhone = true;
+    public string|null        $userId        = '';
+    public array              $products      = [];
+    public PaymentEnum        $payment       = PaymentEnum::CASH;
+    public string             $mark          = '';
+
+    protected function messages(): array
+    {
+        return [
+            'phoneNumber.required' => 'Пожалуйста, укажите номер телефона',
+            'phoneNumber.min'      => 'Пожалуйста, укажите номер телефона полностью',
+            'phoneNumber.max'      => 'Пожалуйста, укажите номер телефона п2олностью',
+            'address.required'     => 'Пожалуйста, укажите адрес',
+        ];
+    }
+
     public function boot
     (
         NotifierInterface $messageService,
@@ -46,6 +68,13 @@ class Order extends Component
     {
         $this->userId = $this->orderService->getUser();
         $this->getProducts();
+        $this->phoneNumber = $this->orderService->getPhone($this->userId) ?? '';
+    }
+
+    #[On('updateAddress')]
+    public function updateAddress($payload): void
+    {
+        $this->address = $payload['address'];
     }
 
     /**
@@ -60,8 +89,36 @@ class Order extends Component
             'Order: error to loading products for order'
         );
     }
+
+    public function sendOrder(): void
+    {
+        $validated = $this->validate();
+        $rememberPhone  = $validated['rememberPhone'] ?? false;
+        unset($validated['rememberPhone']);
+
+        $this->exceptionService->catchToException
+        (
+            function() use($validated, $rememberPhone) {
+                $this->orderService
+                    ->sendOrder
+                    (
+                        $this->userId,
+                        $validated,
+                        $rememberPhone,
+                        $this->products['total'],
+                        $this->payment,
+                        $this->products['orders']
+                    );
+                $this->redirectRoute('home');
+                session::flash('success', 'Успешно заказано');
+                },
+            'Произошла ошибка при отправки заказа',
+            'Order: error to send orders from database'
+        );
+    }
     public function render(): View
     {
+
         return view('livewire.cart.order')
             ->with(
                 [
