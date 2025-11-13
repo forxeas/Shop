@@ -29,6 +29,13 @@
                 </th>
                 <th>
                     <a href="#" class="text-decoration-none text-dark"
+                       wire:click.prevent="changeOrderBy('users.phone_number')">
+                        <x-admin.sort-arrow field="Телефон"
+                                            :name="$fieldName" :directory="$fieldDirectory" :list="$arrayFields"/>
+                    </a>
+                </th>
+                <th>
+                    <a href="#" class="text-decoration-none text-dark"
                        wire:click.prevent="changeOrderBy('users.role')">
                         <x-admin.sort-arrow field="Роль"
                                             :name="$fieldName" :directory="$fieldDirectory" :list="$arrayFields"/>
@@ -51,6 +58,7 @@
                 <tr>
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>
+                    <td>{{ $user->phone_number }}</td>
                     <td>{{ $user->role }}</td>
                     <td>{{ $user->products_count }}</td>
                     <td>

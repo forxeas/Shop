@@ -3,7 +3,8 @@
     namespace App\Livewire\Admin\App;
 
     use Config;
-    use Illuminate\Database\Eloquent\Builder;
+    use Illuminate\Database\Eloquent\Builder as Eloquent;
+    use Illuminate\Database\Query\Builder;
     use Illuminate\View\View;
     use Livewire\Attributes\On;
     use Livewire\Attributes\Url;
@@ -14,7 +15,7 @@
     {
         abstract protected function defaultFieldName(): string;
         abstract public function delete(int $id): void;
-        abstract protected function baseQuery(): Builder;
+        abstract protected function baseQuery(): Eloquent;
         abstract protected function viewPath(): string;
         abstract protected function title(): string;
 
@@ -63,7 +64,7 @@
 
             $this->resetPage();
         }
-        protected function applySearch(Builder $query): Builder
+        protected function applySearch(Builder|Eloquent $query): Builder|Eloquent
         {
             return $query;
         }

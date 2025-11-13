@@ -28,6 +28,13 @@
                 <div class="text-danger">{{ $message }}</div> @enderror
             </div>
             <div class="mb-3">
+                <label for="phone-number" class="form-label">Телефон</label>
+                <input type="tel" class="form-control @error('phoneNumber') is-invalid @enderror" id="phone-number"
+                       placholder="+7 (___) ___-__-__" wire:model.blur="phoneNumber">
+                @error('phoneNumber')
+                <div class="text-danger">{{ $message }}</div> @enderror
+            </div>
+            <div class="mb-3">
                 <label for="role" class="form-label">Роль</label>
                 <select class="form-select @error('role') is-invalid @enderror"
                         wire:model.blur="role">
@@ -45,3 +52,28 @@
         </form>
     </div>
 </div>
+
+<script src="https://unpkg.com/imask@7/dist/imask.min.js"></script>
+
+<script>
+    const phoneNumber = document.getElementById('phone-number');
+    const mask = IMask(phoneNumber, {
+        mask: '+{7} (000) 000-00-00',
+        lazy: false,
+        placeholder: {
+            show: 'always'
+        }
+    });
+
+
+    phoneNumber.addEventListener('blur', () => {
+
+        if (mask.unmaskedValue.length !== 11) {
+            phoneInput.value = '';
+            @this.set('phoneNumber', '');
+            return;
+        }
+
+        @this.set('phoneNumber', mask.value);
+    });
+</script>

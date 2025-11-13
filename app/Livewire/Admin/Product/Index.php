@@ -4,17 +4,19 @@ namespace App\Livewire\Admin\Product;
 
 use App\Livewire\Admin\App\AbstractIndex;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as Eloquent;
+use Illuminate\Database\Query\Builder;
 
 class Index extends AbstractIndex
 {
     public array $arrayFields =
         [
-            'products.id' => 'ID',
-            'products.name' => 'Название продукта',
-            'products.price' => 'Цена продукта',
-            'users.name' => 'Автор',
-            'categories.name' => 'Название категории',
+            'products.id'       => 'ID',
+            'products.name'     => 'Название продукта',
+            'products.price'    => 'Цена продукта',
+            'products.discount' => 'Скидка',
+            'users.name'        => 'Автор',
+            'categories.name'   => 'Название категории',
         ];
     public ?string $fieldName = null;
     public function delete(int $id): void
@@ -23,24 +25,17 @@ class Index extends AbstractIndex
         $this->resetPage();
     }
 
-    protected function applySearch(Builder $query): Builder
+    protected function applySearch(Eloquent|Builder $query): Eloquent
     {
         if (isset($this->search)) {
+            $query = $query
+                ->orWhereAny(array_keys($this->arrayFields), 'like', '%' . $this->search . '%');
 
-            $query = $query->where(function($q) {
-                $q
-                    ->where('products.id', 'like', '%' . $this->search . '%')
-                    ->orWhere('products.name', 'like', '%' . $this->search . '%')
-                    ->orWhere('products.price', 'like', '%' . $this->search . '%')
-                    ->orWhere('users.name', 'like', '%' . $this->search . '%')
-                    ->orWhere('categories.name', 'like', '%' . $this->search . '%');
-                });
-            }
-
-        return $query;
+        }
+            return $query;
     }
 
-    protected function baseQuery(): Builder
+    protected function baseQuery(): Eloquent
     {
         return Product::query()
             ->leftJoin('users', 'users.id', '=', 'products.user_id')

@@ -33,6 +33,14 @@
                 </th>
                 <th>
                     <a href="" class="text-decoration-none text-dark"
+                       wire:click.prevent="changeOrderBy('products.discount')">
+                        <x-admin.sort-arrow
+                                field="Скидка"
+                                :name="$fieldName" :directory="$fieldDirectory" :list="$arrayFields"/>
+                    </a>
+                </th>
+                <th>
+                    <a href="" class="text-decoration-none text-dark"
                        wire:click.prevent="changeOrderBy('users.name')">
                         <x-admin.sort-arrow
                             field="Автор"
@@ -65,6 +73,7 @@
                         </a>
                     </td>
                     <td> {{ $product->price }} </td>
+                    <td> {{ $product->discount }} </td>
                     <td> {{ $product->user->name }} </td>
                     <td> {{ $product->category->name }} </td>
                     <td>

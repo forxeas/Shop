@@ -117,7 +117,6 @@
 <script src="https://unpkg.com/imask@7/dist/imask.min.js"></script>
 
 <script>
-    /* 2. Находим поле и вешаем маску */
     const phoneInput = document.getElementById('phone-input');
     const mask = IMask(phoneInput, {
         mask: '+{7} (000) 000-00-00',

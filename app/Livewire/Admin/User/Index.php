@@ -5,16 +5,18 @@ namespace App\Livewire\Admin\User;
 use App\Livewire\Admin\App\AbstractIndex;
 use App\Models\User;
 use DB;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as Eloquent;
+use Illuminate\Database\Query\Builder;
 
 class Index extends AbstractIndex
 {
     public array  $arrayFields    =
         [
-            'users.id'       => 'ID',
-            'users.name'     => 'Имя',
-            'users.role'     => 'Роль',
-            'products_count' => 'Кол-во товаров у продавца'
+            'users.id'           => 'ID',
+            'users.name'         => 'Имя',
+            'users.phone_number' => 'Телефон',
+            'users.role'         => 'Роль',
+            'products_count'     => 'Кол-во товаров у продавца'
         ];
     public ?string $fieldName = null;
     public function delete(int $id): void
@@ -23,14 +25,18 @@ class Index extends AbstractIndex
         $this->resetPage();
     }
 
-    protected function applySearch(Builder $query): Builder
+    protected function applySearch(Builder|Eloquent $query): Eloquent
     {
         if (isset($this->search)) {
             $query = $query->where(function($q) {
               $q
-                  ->orWhere('users.id', 'like', '%' . $this->search . '%')
-                  ->orWhere('users.name', 'like', '%' . $this->search . '%')
-                  ->orWhere('users.role', 'like', '%' . $this->search . '%')
+                  ->orWhereAny(
+                      [
+                          'users.id',
+                          'users.name',
+                          'users.phone_number',
+                          'users.role'
+                      ], 'like', '%' . $this->search . '%')
                   ->orHaving('products_count', 'like', '%' . $this->search . '%');
             });
         }
@@ -38,7 +44,7 @@ class Index extends AbstractIndex
         return $query;
     }
 
-    protected function baseQuery(): Builder
+    protected function baseQuery(): Eloquent
     {
         return User::query()
             ->leftJoin('products', 'users.id', '=', 'products.user_id')

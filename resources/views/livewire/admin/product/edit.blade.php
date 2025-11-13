@@ -24,6 +24,13 @@
                 <div class="text-danger">{{ $message }}</div> @enderror
             </div>
             <div class="mb-3">
+                <label for="discount" class="form-label">Цена продукта</label>
+                <input type="text" class="form-control @error('discount') is-invalid @enderror" id="discount"
+                       placholder="Скидка" wire:model.blur="discount" value="{{ $product->discount }}">
+                @error('discount')
+                <div class="text-danger">{{ $message }}</div> @enderror
+            </div>
+            <div class="mb-3">
                 <label for="author" class="form-label">Автор</label>
                 <input type="text" class="form-control @error('author') is-invalid @enderror" id="author"
                        placholder="Автор" wire:model.blur="userName" value="{{ $product->user->name }}">
@@ -45,7 +52,6 @@
 
                 <div class="h-25 mt-5">
                     <img src="{{ asset('storage/' . $image) }}" class="img-fluid" alt="Ваша фотография">
-                    @dump(asset($image))
                 </div>
             </div>
 

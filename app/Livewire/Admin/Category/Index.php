@@ -4,7 +4,8 @@ namespace App\Livewire\Admin\Category;
 
 use App\Livewire\Admin\App\AbstractIndex;
 use App\Models\Category;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder as Eloquent;
 
 class Index extends AbstractIndex
 {
@@ -15,13 +16,12 @@ class Index extends AbstractIndex
             'products_count' => 'Сколько товаров',
         ];
     public ?string $fieldName = null;
-    public function applySearch(Builder $query): Builder
+    public function applySearch(Eloquent|Builder $query): Eloquent
     {
         if (isset($this->search)) {
             return $query->where(function($q) {
                 $q
-                    ->orWhere('categories.id', 'like', '%' . $this->search . '%')
-                    ->orWhere('categories.name', 'like', '%' . $this->search . '%')
+                    ->orWhereAny(['categories.id', 'categories.name'], 'like', '%' . $this->search . '%')
                     ->orHaving('products_count', 'like', '%' . $this->search . '%');
             });
         }
@@ -36,11 +36,9 @@ class Index extends AbstractIndex
             ->delete();
     }
 
-    protected function baseQuery(): Builder
+    protected function baseQuery(): Eloquent
     {
-        return Category::query()
-            ->leftJoin('products', 'products.category_id', '=', 'categories.id')
-            ->select('categories.*');
+        return Category::query()->withCount('products');
     }
 
     protected function viewPath(): string

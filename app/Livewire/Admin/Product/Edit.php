@@ -21,7 +21,8 @@ class Edit extends Component
 
     #[Validate('required|decimal:2')]
     public string $price = '';
-
+    #[Validate('required|decimal:2')]
+    public string $discount = '';
     #[Validate('required|string|min:2|max:255')]
     public string $userName;
 
@@ -36,6 +37,7 @@ class Edit extends Component
         $this->name = $this->product->name;
         $this->description = $this->product->description;
         $this->price = $this->product->price;
+        $this->discount = $this->product->discount;
         $this->userName = $this->product->user->name;
         $this->category = $this->product->category->name;
         $this->image = $this->product->image;
@@ -45,10 +47,11 @@ class Edit extends Component
         $data = $this->validate();
 
         $this->product->update([
-            'name'        => $data['name'],
-            'description' => $data['description'],
-            'price'       => $data['price'],
-            'image'       => $data['image']
+            'name'           => $data['name'],
+            'description'    => $data['description'],
+            'price'          => $data['price'],
+            'discount'       => $data['discount'],
+            'image'          => $data['image']
         ]);
 
         $this->product->user->update([
