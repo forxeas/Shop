@@ -6,3 +6,60 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+:root,
+[data-bs-theme="light"] {
+    --bs-body-bg: #ffffff;
+    --bs-body-color: #212529;
+    --bs-border-color: #dee2e6;
+}
+
+[data-bs-theme="dark"] {
+    --bs-body-bg: #1e1e1e;
+    --bs-body-color: #f8f9fa;
+    --bs-border-color: #6c757d;
+}
+
+body {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-bs-theme="dark"] .navbar {
+    background-color: #2d2d2d;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: #2d2d2d;
+    border-color: var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .dropdown-menu {
+    background-color: #2d2d2d;
+    border-color: var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover {
+    background-color: #3d3d3d;
+}
+
+[data-bs-theme="dark"] .btn {
+    border-color: var(--bs-border-color);
+}
+
+[data-bs-theme="dark"] input,
+[data-bs-theme="dark"] textarea,
+[data-bs-theme="dark"] select {
+    background-color: #3d3d3d;
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] input:focus,
+[data-bs-theme="dark"] textarea:focus,
+[data-bs-theme="dark"] select:focus {
+    background-color: #3d3d3d;
+    color: var(--bs-body-color);
+}

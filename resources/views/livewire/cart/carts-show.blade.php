@@ -27,7 +27,7 @@
                         <div class="col-md-6">
                             <div class="card h-100 shadow-sm border-0">
                                 <x-app.card-body :product="$item->product" />
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer border-0">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <div class="btn-group" role="group">
                                             <button class="btn btn-outline-danger"
@@ -62,8 +62,13 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="text-end fw-bold">
+                                    <div class="text-end small text-decoration-line-through">
                                         {{ number_format($item->product->price * $item->quantity, 2, '.', ' ') }} ₽
+                                    </div>
+                                    <div class="text-end fw-bold">
+                                        {{ number_format($item->product->price * $item->quantity
+                                            - $item->product->discount * $item->quantity, 2, '.', ' ')
+                                            }} ₽
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +96,7 @@
                         <hr>
                         <p class="d-flex justify-content-between fs-5">
                             <span>Итого:</span>
-                            <span class="fw-bold text-dark">
+                            <span class="fw-bold">
                                 {{ number_format($totalWithDiscount, 2, '.', ' ') }} ₽
                             </span>
                         </p>

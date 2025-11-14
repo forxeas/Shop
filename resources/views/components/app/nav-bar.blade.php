@@ -70,7 +70,12 @@
                         </li>
                     @endcan
                 </ul>
-                <livewire:admin.helper.search-field />
+                @if(request()->routeIs('home'))
+                    <livewire:admin.helper.search-field />
+                @endif
+                <div class="ms-3">
+                    <livewire:app.theme-switcher />
+                </div>
             </div>
         </div>
     </nav>
