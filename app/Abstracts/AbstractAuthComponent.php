@@ -30,7 +30,5 @@ abstract class AbstractAuthComponent extends Component
         $this->service                 = $authService;
 
         $this->exceptionService->boot($this->messageService, $this);
-
-        $this->exceptionService->boot($this->messageService, $this);
     }
 }

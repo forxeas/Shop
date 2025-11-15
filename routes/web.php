@@ -7,6 +7,7 @@ use App\Livewire\App\MainShow;
 use App\Livewire\Auth\UserLogin;
 use App\Livewire\Auth\UserLogout;
 use App\Livewire\Auth\UserRegister;
+use App\Livewire\Auth\VerifyMail;
 use App\Livewire\Cart\CartsShow;
 use App\Livewire\Cart\Order;
 use App\Livewire\Privileges\ProductCreate;
@@ -17,6 +18,7 @@ Route::get('/cart', CartsShow::class)->name('cart');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', UserRegister::class)->name('register');
+    Route::get('/verify-mail/{uuid}', VerifyMail::class)->name('verify-mail');
     Route::get('/login', UserLogin::class)->name('login');
 });
 
@@ -25,7 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', UserLogout::class)->name('logout');
 
     Route::get('/product/create', ProductCreate::class)->name('product.create');
-
     Route::get('order', Order::class)->name('order');
 
 
